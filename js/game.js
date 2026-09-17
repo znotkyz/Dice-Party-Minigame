@@ -331,43 +331,16 @@ class DiceGame {
     const priceInfo = this.calculateLastChancePrice();
     const remainingSteps = priceInfo.remainingSteps;
 
+    // Set progress to 50 wins to unlock all tiers, leaving rewards ready to be manually claimed by player
     this.state.milestoneWins = 50;
     this.state.lastChancePurchased = true;
 
-    let totalChipsAdded = 0;
-    const itemsClaimed = [];
-
-    // Auto-claim all free & premium milestones up to 50
-    for (const m of DiceGame.MILESTONES) {
-      // Claim Free
-      if (!this.state.claimedFreeMilestones.includes(m.wins)) {
-        this.state.claimedFreeMilestones.push(m.wins);
-        if (m.free.type === 'chips') {
-          totalChipsAdded += m.free.amount;
-        } else {
-          itemsClaimed.push(m.free.name);
-        }
-      }
-      // Claim Premium
-      if (!this.state.claimedPremiumMilestones.includes(m.wins)) {
-        this.state.claimedPremiumMilestones.push(m.wins);
-        if (m.premium.type === 'chips') {
-          totalChipsAdded += m.premium.amount;
-        } else {
-          itemsClaimed.push(m.premium.name);
-        }
-      }
-    }
-
-    this.state.coins += totalChipsAdded;
     this.saveState();
 
     return {
       success: true,
       price: priceInfo.promoPrice,
-      remainingSteps,
-      totalChipsAdded,
-      itemsClaimed
+      remainingSteps
     };
   }
 

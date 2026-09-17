@@ -124,13 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const remaining = priceInfo.remainingSteps;
 
     if (game.state.milestoneWins >= 50) {
-      promoStatusText.innerHTML = `“ยินดีด้วย! คุณสะสมครบ 50 ขั้นและรับกรอบโปรไฟล์ถาวรเรียบร้อยแล้ว!”`;
+      promoStatusText.innerHTML = `“ยินดีด้วย! คุณปลดล็อกครบ 50 ขั้นแล้ว เข้าไปกดรับรางวัลใน Milestone Reward ได้เลย”`;
       promoOriginalStrike.style.display = 'none';
       btnPromoBuyDeal.disabled = true;
       btnPromoBuyDeal.classList.remove('require-premium');
       btnPromoBuyDeal.classList.add('purchased-state');
-      promoBuyDealText.textContent = 'รับรางวัลครบแล้ว ✓';
-      promoDetailNote.textContent = 'คุณได้รับกรอบโปรไฟล์ถาวรและไอเทมทั้งหมดครบ 50 ขั้นแล้ว!';
+      promoBuyDealText.textContent = 'ปลดล็อกครบ 50 ขั้นแล้ว ✓';
+      promoDetailNote.textContent = 'เข้าไปกดรับของรางวัลทั้งหมดในหน้าต่าง Milestone Reward ได้ทันที!';
     } else if (!game.state.isPremiumUnlocked) {
       // Must unlock Premium 369 THB first!
       promoStatusText.innerHTML = `“คุณยังขาดอีก <span id="promo-missing-count" class="promo-highlight-count">${remaining}</span> ขั้นเพื่อรับกรอบโปรไฟล์ถาวร”`;
@@ -660,7 +660,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.success) {
         updateUI();
         renderLastChanceModal();
-        showToast(`🎉 เหมาสำเร็จ! (${res.price} บาท) ปลดล็อกครบ 50 ขั้น ได้รับกรอบโปรไฟล์ถาวร & ชิป ${res.totalChipsAdded.toLocaleString()} ชิป!`, 3500);
+        showToast(`🎉 เหมาสำเร็จ! (${res.price} บาท) ปลดล็อกครบ 50 ขั้นแล้ว เข้าไปกดรับรางวัลใน Milestone Reward ได้เลย!`, 3500);
+        closeModal(modalLastChancePromo);
+        setTimeout(() => {
+          renderMilestoneRewards();
+          openModal(modalMilestoneRewards);
+        }, 320);
       }
     });
   }
@@ -680,6 +685,8 @@ document.addEventListener('DOMContentLoaded', () => {
     devSimMissing8.addEventListener('click', () => {
       game.state.isPremiumUnlocked = true;
       game.state.milestoneWins = 3; // 8 steps remaining (5, 10, 15, 20, 25, 30, 40, 50)
+      game.state.claimedFreeMilestones = [1, 3];
+      game.state.claimedPremiumMilestones = [1, 3];
       game.saveState();
       updateUI();
       renderLastChanceModal();
@@ -693,6 +700,8 @@ document.addEventListener('DOMContentLoaded', () => {
     devSimMissing10.addEventListener('click', () => {
       game.state.isPremiumUnlocked = true;
       game.state.milestoneWins = 0; // 10 steps remaining
+      game.state.claimedFreeMilestones = [];
+      game.state.claimedPremiumMilestones = [];
       game.saveState();
       updateUI();
       renderLastChanceModal();
