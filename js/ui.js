@@ -481,6 +481,9 @@ document.addEventListener('DOMContentLoaded', () => {
     sound.playClick();
     if (confirm('คุณต้องการรีเซ็ตข้อมูลและคะแนนทั้งหมดของเกมหรือไม่?')) {
       game.resetAll();
+      elSystemScore.textContent = '0';
+      elPlayerScore.textContent = '0';
+      elResultBanner.classList.remove('show');
       updateUI();
       closeModal(modalHome);
       showToast('🔄 รีเซ็ตข้อมูลเกมกลับสู่ค่าเริ่มต้นแล้ว');
