@@ -9,9 +9,9 @@
     content="มินิเกมทอยเต๋าดวลคะแนนกับระบบ (PvE) สุ่มแต้ม 1-12 ลุ้นเสมอได้ Free Roll และสะสมชัยชนะครบ 50 ครั้งรับ Special Pack สุดพิเศษ!">
 
   <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/dice.css">
-  <link rel="stylesheet" href="css/modals.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/dice.css?v=2">
+  <link rel="stylesheet" href="css/modals.css?v=2">
 </head>
 
 <body>
@@ -198,17 +198,17 @@
          BOTTOM BAR
          ========================================== -->
     <footer class="bottom-bar">
-      <!-- Milestone Counter Box (Left) -->
-      <div id="milestone-widget" class="milestone-widget" title="คลิกเพื่อดูรางวัล Special Pack เมื่อชนะครบ 50 ครั้ง">
+      <!-- Milestone Counter Box (Milestone Reward Pass) -->
+      <div id="milestone-widget" class="milestone-widget" title="คลิกเพื่อดู Milestone Reward & Battle Pass (Free & Premium)">
         <img src="assets/images/chest.png" alt="Chest" class="milestone-chest-icon">
-        <div class="milestone-header">
-          <span class="milestone-title">Milestone</span>
-          <span class="milestone-badge">⭐ Special Pack</span>
+        <div class="milestone-header" style="justify-content: flex-start !important; gap: 6px !important;">
+          <span class="milestone-title">Milestone <span class="milestone-badge" style="color: #ffd700; margin-left: 2px;">Reward</span></span>
         </div>
         <div class="progress-track">
           <div id="milestone-bar" class="progress-fill" style="width: 0%;"></div>
         </div>
         <div id="milestone-text" class="milestone-counter-text">0 / 50</div>
+        <span id="milestone-claim-dot" class="milestone-claim-dot" style="display: none;">!</span>
       </div>
 
       <!-- Giant 3D Orange ROLL Button (Center) -->
@@ -235,6 +235,129 @@
     <!-- Discreet Dev Tools Button -->
     <button id="btn-dev-toggle" class="dev-tool-toggle" title="เครื่องมือทดสอบสำหรับ Developer">🛠️ Dev Tools</button>
   </main>
+
+  <!-- ==========================================
+       MODAL 0: MILESTONE REWARDS (DUAL-TRACK BATTLE PASS)
+       ========================================== -->
+  <div id="modal-milestone-rewards" class="modal-overlay">
+    <div class="modal-window milestone-rewards-modal-window">
+      <!-- Modal Header -->
+      <div class="pass-modal-header">
+        <div class="pass-header-left">
+          <button class="btn-modal-close btn-pass-back" title="ย้อนกลับ">🏠</button>
+          <div class="pass-title-group">
+            <div class="pass-logo-text">🎲 Dice Party</div>
+            <div class="pass-title-text">Milestone Rewards</div>
+          </div>
+        </div>
+        <div class="pass-header-right">
+          <div class="currency-badge coin-badge">
+            <span class="currency-icon">🪙</span>
+            <span id="pass-coin-val" class="currency-val">12,580</span>
+          </div>
+          <div class="currency-badge ticket-badge">
+            <span class="currency-icon">🎟️</span>
+            <span id="pass-ticket-val" class="currency-val">5</span>
+            <button class="btn-add-ticket-mini" id="btn-pass-add-ticket">+</button>
+          </div>
+          <button class="btn-modal-close" style="font-size: 26px; margin-left: 8px;">&times;</button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="pass-modal-body">
+        <!-- Progress Bar Section -->
+        <div class="pass-progress-section">
+          <div id="pass-progress-text" class="pass-progress-header">MILESTONE PROGRESS: 0 / 50</div>
+          <div class="pass-progress-bar-container">
+            <div class="pass-crown-badge">👑</div>
+            <div class="pass-progress-track">
+              <div id="pass-progress-fill" class="pass-progress-fill" style="width: 0%;"></div>
+            </div>
+            <!-- Buffalo Mascot marker along progress bar -->
+            <div id="pass-progress-mascot" class="pass-track-mascot" style="left: 24px;">
+              <img src="assets/images/mascot_system.png" alt="Mascot">
+            </div>
+          </div>
+        </div>
+
+        <!-- Dual Tracks Grid with Grand Preview on the right -->
+        <div class="pass-tracks-wrapper">
+          <!-- Left: Fixed Labels Column -->
+          <div class="pass-tracks-labels-col">
+            <div class="track-label-card premium-label-card">
+              <div class="track-label-icon">💰</div>
+              <div class="track-label-text">PREMIUM</div>
+            </div>
+            <div class="track-label-card free-label-card">
+              <div class="track-label-icon">☁️</div>
+              <div class="track-label-text">FREE</div>
+            </div>
+          </div>
+
+          <!-- Center: Single Unified Smooth Scroller for both tracks -->
+          <div class="pass-unified-scroller" id="pass-unified-scroller">
+            <div class="pass-unified-scroll-content">
+              <!-- Premium Track Row -->
+              <div class="pass-track-row premium-row">
+                <!-- Golden Chains & Padlock Overlay when locked -->
+                <div id="premium-locked-overlay" class="premium-locked-overlay">
+                  <div class="chain-decor chain-top"></div>
+                  <div class="lock-shield">
+                    <span class="big-padlock-icon">🔒</span>
+                    <div>
+                      <div class="lock-shield-title">Premium Rewards Locked</div>
+                      <div class="lock-shield-sub">ปลดล็อกเพื่อรับชิปมหาศาล & ไอเทมระดับตำนาน</div>
+                    </div>
+                  </div>
+                  <div class="chain-decor chain-bottom"></div>
+                </div>
+                <!-- 10 Slots Container -->
+                <div class="track-slots-row" id="premium-track-slots">
+                  <!-- Dynamically populated by JS -->
+                </div>
+              </div>
+
+              <!-- Free Track Row -->
+              <div class="pass-track-row free-row">
+                <!-- 10 Slots Container -->
+                <div class="track-slots-row" id="free-track-slots">
+                  <!-- Dynamically populated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grand Final Preview Showcase Card -->
+          <div class="pass-grand-preview-card">
+            <div class="grand-preview-item">
+              <div class="grand-preview-icon-wrap">🖼️👑</div>
+              <div class="grand-preview-text">Permanent Premium<br>Profile Frame</div>
+            </div>
+            <div style="width: 80%; height: 1.5px; background: #eed0bb; margin: 4px 0;"></div>
+            <div class="grand-preview-item">
+              <div class="grand-preview-icon-wrap">✨🧩</div>
+              <div class="grand-preview-text">Legendary<br>Jigsaw (Gold)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="pass-modal-footer">
+          <div class="pass-scroll-nav">
+            <button id="btn-pass-prev" class="btn-pass-arrow" title="เลื่อนซ้าย">◀</button>
+            <button id="btn-pass-next" class="btn-pass-arrow" title="เลื่อนขวา">▶</button>
+            <span style="font-size: 11px; color: #ffccd5; margin-left: 6px;">เลื่อนดูรางวัลทั้ง 10 ขั้น (1, 3, 5, 10, 15, 20, 25, 30, 40, 50 ชนะ)</span>
+          </div>
+
+          <button id="btn-unlock-premium" class="btn-unlock-premium">
+            <span id="btn-unlock-text">ปลดล็อก Premium 369 THB</span>
+            <span class="unlock-sparkle">✨</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ==========================================
        MODAL 1: TICKET SHOP
@@ -292,39 +415,6 @@
             รับฟรี +5 ใบ
           </button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       MODAL 2: SPECIAL PACK CELEBRATION (50 WINS)
-       ========================================== -->
-  <div id="modal-special-pack" class="modal-overlay special-pack-modal">
-    <div class="modal-window">
-      <div class="modal-body pack-burst-stage">
-        <img src="assets/images/chest.png" alt="Grand Chest" class="grand-chest-anim">
-        <div class="congrats-heading">🎉 ยินดีด้วย! ปลดล็อก SPECIAL PACK! 🎉</div>
-        <div class="congrats-desc">คุณชนะการดวลสะสมครบ 50 ครั้งสำเร็จตามเป้าหมาย Milestone!</div>
-
-        <div class="reward-items-container">
-          <div class="reward-item-card">
-            <div class="reward-icon">👑</div>
-            <div class="reward-qty">ฉายาพิเศษ</div>
-            <div class="reward-name">Master of Dice</div>
-          </div>
-          <div class="reward-item-card">
-            <div class="reward-icon">🪙</div>
-            <div class="reward-qty">+10,000</div>
-            <div class="reward-name">Gold Coins</div>
-          </div>
-          <div class="reward-item-card">
-            <div class="reward-icon">🎫</div>
-            <div class="reward-qty">+20 ใบ</div>
-            <div class="reward-name">Golden Tickets</div>
-          </div>
-        </div>
-
-        <button id="btn-claim-pack" class="btn-claim-pack">กดรับรางวัลใหญ่!</button>
       </div>
     </div>
   </div>
@@ -448,9 +538,10 @@
       <button id="dev-force-draw" class="dev-btn" style="border-color: #00d2ff;">⚡ ล็อคผล: เสมอ (DRAW -> Free
         Roll)</button>
       <button id="dev-force-lose" class="dev-btn" style="border-color: #e74c3c;">⚡ ล็อคผล: แพ้ (LOSE)</button>
+      <button id="dev-toggle-premium" class="dev-btn" style="border-color: #f1c40f; background: #512270; color: #ffd700;">👑 สลับ ปลดล็อก/ล็อค Premium</button>
       <button id="dev-add-10wins" class="dev-btn">+10 Wins Milestone</button>
-      <button id="dev-set-49wins" class="dev-btn" style="background: #e67e22; font-weight: 900;">🔥 ตั้งเป็น 49 ชนะ
-        (ทดสอบ Special Pack ทันที)</button>
+      <button id="dev-set-49wins" class="dev-btn" style="background: #e67e22; font-weight: 900;">🔥 ตั้งเป็น 49 ชนะ (ทดสอบ Milestone 50)</button>
+      <button id="dev-reset-milestone-wins" class="dev-btn">🔄 รีเซ็ต Wins เป็น 0</button>
       <button id="dev-add-tickets" class="dev-btn">+10 Tickets</button>
       <button id="dev-add-coins" class="dev-btn">+5,000 Coins</button>
     </div>

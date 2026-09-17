@@ -23,9 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const mascotSystem = document.getElementById('mascot-system-img');
   const mascotPlayer = document.getElementById('mascot-player-img');
 
+  // Milestone Rewards Pass Elements
+  const milestoneWidget = document.getElementById('milestone-widget');
+  const milestoneClaimDot = document.getElementById('milestone-claim-dot');
+  const modalMilestoneRewards = document.getElementById('modal-milestone-rewards');
+  const passCoinVal = document.getElementById('pass-coin-val');
+  const passTicketVal = document.getElementById('pass-ticket-val');
+  const passProgressText = document.getElementById('pass-progress-text');
+  const passProgressFill = document.getElementById('pass-progress-fill');
+  const passProgressMascot = document.getElementById('pass-progress-mascot');
+  const passUnifiedScroller = document.getElementById('pass-unified-scroller');
+  const premiumTrackSlots = document.getElementById('premium-track-slots');
+  const freeTrackSlots = document.getElementById('free-track-slots');
+  const premiumLockedOverlay = document.getElementById('premium-locked-overlay');
+  const btnUnlockPremium = document.getElementById('btn-unlock-premium');
+  const btnUnlockText = document.getElementById('btn-unlock-text');
+  const btnPassPrev = document.getElementById('btn-pass-prev');
+  const btnPassNext = document.getElementById('btn-pass-next');
+  const btnPassAddTicket = document.getElementById('btn-pass-add-ticket');
+
   // Modals
   const modalShop = document.getElementById('modal-shop');
-  const modalSpecialPack = document.getElementById('modal-special-pack');
   const modalHistory = document.getElementById('modal-history');
   const modalHelp = document.getElementById('modal-help');
   const modalHome = document.getElementById('modal-home');
@@ -47,7 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = game.state.milestoneTarget;
     const pct = Math.min(100, Math.round((wins / target) * 100));
     elMilestoneBar.style.width = `${pct}%`;
-    elMilestoneText.textContent = `${wins} / ${target}`;
+    elMilestoneText.textContent = `${Math.min(target, wins)} / ${target}`;
+
+    // Notification Dot on Milestone Rewards button if there are unclaimed rewards
+    if (game.hasUnclaimedMilestone()) {
+      milestoneClaimDot.style.display = 'flex';
+    } else {
+      milestoneClaimDot.style.display = 'none';
+    }
 
     // Roll button mode (always uses the classic orange-gold frame)
     if (game.state.freeRollActive) {
@@ -56,6 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       btnRollText.textContent = 'ทอย';
       btnRollSub.textContent = 'ใช้ 1 ทิกเก็ต';
+    }
+
+    // Update modal if currently visible
+    if (modalMilestoneRewards && modalMilestoneRewards.classList.contains('active')) {
+      renderMilestoneRewards();
     }
   }
 
@@ -170,17 +200,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateUI();
 
-    // Step 4: Check Milestone 50 trigger
-    if (duel.unlockedSpecialPack) {
-      setTimeout(() => {
-        sound.playSpecialPack();
-        dice3d.spawnConfetti(150);
-        openModal(modalSpecialPack);
-      }, 900);
-    }
-
     isRolling = false;
     btnRoll.disabled = false;
+  }
+
+  // ==========================================
+  // Milestone Rewards Dual-Track Pass Rendering
+  // ==========================================
+  function renderMilestoneRewards() {
+    passCoinVal.textContent = game.state.coins.toLocaleString();
+    passTicketVal.textContent = game.state.tickets;
+
+    const wins = Math.min(50, game.state.milestoneWins);
+    passProgressText.textContent = `MILESTONE PROGRESS: ${wins} / 50`;
+    const pct = Math.min(100, Math.round((wins / 50) * 100));
+    passProgressFill.style.width = `${pct}%`;
+    passProgressMascot.style.left = `calc(${Math.max(2, Math.min(96, pct))}% - 12px)`;
+
+    // Handle Premium lock status
+    if (game.state.isPremiumUnlocked) {
+      premiumLockedOverlay.classList.add('unlocked');
+      btnUnlockPremium.classList.add('unlocked-state');
+      btnUnlockText.textContent = 'ปลดล็อกแล้ว (ACTIVE) ✓';
+    } else {
+      premiumLockedOverlay.classList.remove('unlocked');
+      btnUnlockPremium.classList.remove('unlocked-state');
+      btnUnlockText.textContent = 'ปลดล็อก Premium 369 THB';
+    }
+
+    // Helper for reliable cross-platform reward icons (renders beautiful SVG chips on any OS)
+    const getRewardIcon = (item) => {
+      if (item.type === 'chips') {
+        return `<svg class="chip-stack-icon" viewBox="0 0 32 32">
+          <ellipse cx="16" cy="23" rx="13" ry="4.5" fill="#7f1d1d"/>
+          <ellipse cx="16" cy="21" rx="13" ry="4.5" fill="#dc2626"/>
+          <ellipse cx="16" cy="21" rx="10" ry="3" fill="none" stroke="#fca5a5" stroke-dasharray="3,2.5" stroke-width="1.2"/>
+          
+          <ellipse cx="16" cy="17" rx="13" ry="4.5" fill="#991b1b"/>
+          <ellipse cx="16" cy="15" rx="13" ry="4.5" fill="#ef4444"/>
+          <ellipse cx="16" cy="15" rx="10" ry="3" fill="none" stroke="#fecaca" stroke-dasharray="3,2.5" stroke-width="1.2"/>
+          
+          <ellipse cx="16" cy="11" rx="13" ry="4.5" fill="#b91c1c"/>
+          <ellipse cx="16" cy="9" rx="13" ry="4.5" fill="#f87171"/>
+          <ellipse cx="16" cy="9" rx="10" ry="3" fill="none" stroke="#ffffff" stroke-dasharray="3,2.5" stroke-width="1.4"/>
+          <ellipse cx="16" cy="9" rx="5" ry="1.8" fill="#dc2626"/>
+        </svg>`;
+      }
+      return item.icon;
+    };
+
+    // Render Premium Track Slots (10 Milestones)
+    premiumTrackSlots.innerHTML = DiceGame.MILESTONES.map(m => {
+      const reached = game.state.milestoneWins >= m.wins;
+      const claimed = game.isMilestoneClaimed('premium', m.wins);
+      const canClaim = game.canClaimMilestone('premium', m.wins);
+      const isBonus = m.premium.name.includes('โบนัส');
+      const bonusMatch = m.premium.name.match(/\+(\d+[%kKmM]+)/);
+      const bonusText = bonusMatch ? `+${bonusMatch[1]}` : (isBonus ? '+โบนัส' : '');
+
+      let statusHtml = '';
+      if (claimed) {
+        statusHtml = `<span class="slot-status-badge claimed">✓ รับแล้ว</span>`;
+      } else if (canClaim) {
+        statusHtml = `<button class="btn-claim-slot" data-track="premium" data-wins="${m.wins}">กดรับ</button>`;
+      } else if (!game.state.isPremiumUnlocked) {
+        statusHtml = `<span class="slot-status-badge locked">🔒 ล็อค</span>`;
+      } else {
+        statusHtml = `<span class="slot-status-badge locked">🔒 ${m.wins} ชนะ</span>`;
+      }
+
+      return `
+        <div class="pass-slot-card premium-slot ${canClaim ? 'is-current' : ''}">
+          <div class="slot-icon">${getRewardIcon(m.premium)}</div>
+          <div class="slot-label" title="${m.premium.name}">${m.premium.label}</div>
+          ${bonusText ? `<div class="slot-bonus-tag">${bonusText}</div>` : ''}
+          ${statusHtml}
+        </div>
+      `;
+    }).join('');
+
+    // Render Free Track Slots (10 Milestones)
+    freeTrackSlots.innerHTML = DiceGame.MILESTONES.map(m => {
+      const reached = game.state.milestoneWins >= m.wins;
+      const claimed = game.isMilestoneClaimed('free', m.wins);
+      const canClaim = game.canClaimMilestone('free', m.wins);
+
+      let statusHtml = '';
+      if (claimed) {
+        statusHtml = `<span class="slot-status-badge claimed">✓ รับแล้ว</span>`;
+      } else if (canClaim) {
+        statusHtml = `<button class="btn-claim-slot" data-track="free" data-wins="${m.wins}">กดรับ</button>`;
+      } else if (m.free.timed) {
+        statusHtml = `<span class="slot-status-badge timed">${m.free.timed}</span>`;
+      } else {
+        statusHtml = `<span class="slot-status-badge locked">🔒 ${m.wins} ชนะ</span>`;
+      }
+
+      return `
+        <div class="pass-slot-card free-slot ${canClaim ? 'is-current' : ''}">
+          <div class="slot-milestone-marker">${m.wins}</div>
+          <div class="slot-icon">${getRewardIcon(m.free)}</div>
+          <div class="slot-label" title="${m.free.name}">${m.free.label}</div>
+          ${statusHtml}
+        </div>
+      `;
+    }).join('');
   }
 
   // ==========================================
@@ -215,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Top Bar buttons
   document.getElementById('btn-add-ticket').addEventListener('click', () => openModal(modalShop));
+  btnPassAddTicket.addEventListener('click', () => openModal(modalShop));
+
   document.getElementById('btn-sound-toggle').addEventListener('click', (e) => {
     const isAudioOn = sound.toggle();
     e.currentTarget.textContent = isAudioOn ? '🔊' : '🔇';
@@ -222,14 +348,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('btn-home').addEventListener('click', () => openModal(modalHome));
 
-  // Bottom Bar buttons
-  document.getElementById('milestone-widget').addEventListener('click', () => {
+  // Milestone Widget (Click to open Milestone Rewards & Battle Pass modal)
+  milestoneWidget.addEventListener('click', () => {
     sound.playClick();
-    if (game.state.milestoneWins >= game.state.milestoneTarget) {
-      openModal(modalSpecialPack);
-    } else {
-      showToast(`🎯 ชนะสะสม ${game.state.milestoneWins}/${game.state.milestoneTarget} ครั้ง เพื่อเปิด Special Pack!`);
-    }
+    renderMilestoneRewards();
+    openModal(modalMilestoneRewards);
   });
 
   document.getElementById('btn-history').addEventListener('click', () => {
@@ -271,13 +394,88 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('🎁 เติมตั๋วฟรีสำหรับทดสอบ +5 ใบเรียบร้อย!');
   });
 
-  // Claim Special Pack
-  document.getElementById('btn-claim-pack').addEventListener('click', () => {
-    sound.playCoin();
-    const claim = game.claimSpecialPack();
+  // Claim Milestone Reward Slot
+  document.addEventListener('click', (e) => {
+    const claimBtn = e.target.closest('.btn-claim-slot');
+    if (!claimBtn) return;
+
+    const track = claimBtn.dataset.track;
+    const wins = parseInt(claimBtn.dataset.wins, 10);
+
+    const reward = game.claimMilestone(track, wins);
+    if (reward) {
+      sound.playCoin();
+      dice3d.spawnConfetti(70);
+      showToast(`🎉 ได้รับรางวัล: ${reward.name}!`);
+      updateUI();
+      renderMilestoneRewards();
+    }
+  });
+
+  // Unlock Premium Button (369 THB)
+  btnUnlockPremium.addEventListener('click', () => {
+    if (game.state.isPremiumUnlocked) {
+      sound.playClick();
+      showToast('🌟 คุณปลดล็อกสิทธิ์ Premium Track เรียบร้อยแล้ว!');
+      return;
+    }
+
+    sound.playSpecialPack();
+    dice3d.spawnConfetti(140);
+    game.unlockPremium();
     updateUI();
-    closeModal(modalSpecialPack);
-    showToast(`🏆 รับรางวัล Special Pack: +${claim.coinsAdded.toLocaleString()} Coins และ +${claim.ticketsAdded} Tickets สำเร็จ!`);
+    renderMilestoneRewards();
+    showToast('👑 ปลดล็อก Premium Pass สำเร็จ! (369 THB) โซ่และแม่กุญแจถูกปลดออกแล้ว!');
+  });
+
+  // ==========================================
+  // Ultra-Smooth Pass Scroller (Wheel, Drag & Buttons)
+  // ==========================================
+  btnPassPrev.addEventListener('click', () => {
+    sound.playClick();
+    passUnifiedScroller.scrollBy({ left: -240, behavior: 'smooth' });
+  });
+
+  btnPassNext.addEventListener('click', () => {
+    sound.playClick();
+    passUnifiedScroller.scrollBy({ left: 240, behavior: 'smooth' });
+  });
+
+  // Smooth Mouse Wheel -> Horizontal Scroll
+  passUnifiedScroller.addEventListener('wheel', (e) => {
+    if (e.deltaY !== 0) {
+      e.preventDefault();
+      passUnifiedScroller.scrollLeft += e.deltaY * 0.9;
+    }
+  }, { passive: false });
+
+  // Native-feel Drag to Scroll (Mouse & Pointer)
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartScrollLeft = 0;
+
+  passUnifiedScroller.addEventListener('mousedown', (e) => {
+    // Avoid interfering with claim button clicks
+    if (e.target.closest('.btn-claim-slot, button')) return;
+    isDragging = true;
+    dragStartX = e.pageX - passUnifiedScroller.offsetLeft;
+    dragStartScrollLeft = passUnifiedScroller.scrollLeft;
+    passUnifiedScroller.style.scrollBehavior = 'auto'; // Instant during manual drag
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      passUnifiedScroller.style.scrollBehavior = 'smooth';
+    }
+  });
+
+  passUnifiedScroller.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - passUnifiedScroller.offsetLeft;
+    const walk = (x - dragStartX) * 1.3;
+    passUnifiedScroller.scrollLeft = dragStartScrollLeft - walk;
   });
 
   // Reset Game Button (In Home modal)
@@ -297,6 +495,24 @@ document.addEventListener('DOMContentLoaded', () => {
     devPanel.classList.toggle('open');
   });
 
+  document.getElementById('dev-toggle-premium').addEventListener('click', () => {
+    game.state.isPremiumUnlocked = !game.state.isPremiumUnlocked;
+    game.saveState();
+    updateUI();
+    renderMilestoneRewards();
+    showToast(`👑 Dev: Premium status is now -> ${game.state.isPremiumUnlocked ? 'UNLOCKED' : 'LOCKED'}`);
+  });
+
+  document.getElementById('dev-reset-milestone-wins').addEventListener('click', () => {
+    game.state.milestoneWins = 0;
+    game.state.claimedFreeMilestones = [];
+    game.state.claimedPremiumMilestones = [];
+    game.saveState();
+    updateUI();
+    renderMilestoneRewards();
+    showToast('🔄 Dev: Reset milestone wins to 0 and cleared claims!');
+  });
+
   document.getElementById('dev-add-10wins').addEventListener('click', () => {
     game.state.milestoneWins += 10;
     game.saveState();
@@ -308,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
     game.state.milestoneWins = 49;
     game.saveState();
     updateUI();
-    showToast('⚙️ Dev: Milestone set to 49! ทอยชนะอีก 1 ครั้งเพื่อเปิด Special Pack!');
+    showToast('⚙️ Dev: Milestone set to 49! ทอยชนะอีก 1 ครั้งเพื่อครบ 50 ชนะ!');
   });
 
   document.getElementById('dev-force-win').addEventListener('click', () => {

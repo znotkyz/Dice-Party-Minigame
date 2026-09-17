@@ -540,19 +540,21 @@ body {
 
 .milestone-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 6px;
   margin-bottom: 4px;
 }
 
 .milestone-title {
-  font-weight: 700;
+  font-weight: 800;
   font-size: 14px;
   color: #fff;
 }
 
 .milestone-badge {
-  font-size: 13px;
+  font-weight: 800;
+  font-size: 14px;
   color: #ffd700;
 }
 

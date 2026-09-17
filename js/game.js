@@ -18,7 +18,10 @@ class DiceGame {
       totalWins: 0,
       history: [],
       specialPackClaimed: false,
-      forcedOutcome: null // For Dev Tools testing ('win' | 'lose' | 'draw' | null)
+      forcedOutcome: null, // For Dev Tools testing ('win' | 'lose' | 'draw' | null)
+      isPremiumUnlocked: false,
+      claimedFreeMilestones: [],
+      claimedPremiumMilestones: []
     };
 
     this.loadState();
@@ -199,6 +202,61 @@ class DiceGame {
     this.saveState();
   }
 
+  unlockPremium() {
+    this.state.isPremiumUnlocked = true;
+    this.saveState();
+    return true;
+  }
+
+  canClaimMilestone(track, milestoneWins) {
+    if (this.state.milestoneWins < milestoneWins) return false;
+    if (track === 'free') {
+      return !this.state.claimedFreeMilestones.includes(milestoneWins);
+    } else if (track === 'premium') {
+      if (!this.state.isPremiumUnlocked) return false;
+      return !this.state.claimedPremiumMilestones.includes(milestoneWins);
+    }
+    return false;
+  }
+
+  isMilestoneClaimed(track, milestoneWins) {
+    if (track === 'free') {
+      return this.state.claimedFreeMilestones.includes(milestoneWins);
+    } else {
+      return this.state.claimedPremiumMilestones.includes(milestoneWins);
+    }
+  }
+
+  claimMilestone(track, milestoneWins) {
+    if (!this.canClaimMilestone(track, milestoneWins)) return null;
+
+    const m = DiceGame.MILESTONES.find(item => item.wins === milestoneWins);
+    if (!m) return null;
+
+    const reward = track === 'free' ? m.free : m.premium;
+
+    if (track === 'free') {
+      this.state.claimedFreeMilestones.push(milestoneWins);
+    } else {
+      this.state.claimedPremiumMilestones.push(milestoneWins);
+    }
+
+    if (reward.type === 'chips') {
+      this.state.coins += reward.amount;
+    }
+
+    this.saveState();
+    return reward;
+  }
+
+  hasUnclaimedMilestone() {
+    for (const m of DiceGame.MILESTONES) {
+      if (this.canClaimMilestone('free', m.wins)) return true;
+      if (this.canClaimMilestone('premium', m.wins)) return true;
+    }
+    return false;
+  }
+
   resetAll() {
     localStorage.removeItem(this.STORAGE_KEY);
     this.state = {
@@ -211,10 +269,67 @@ class DiceGame {
       totalWins: 0,
       history: [],
       specialPackClaimed: false,
-      forcedOutcome: null
+      forcedOutcome: null,
+      isPremiumUnlocked: false,
+      claimedFreeMilestones: [],
+      claimedPremiumMilestones: []
     };
     this.saveState();
   }
 }
+
+// 10 Milestones (Non-linear progression: 1, 3, 5, 10, 15, 20, 25, 30, 40, 50)
+DiceGame.MILESTONES = [
+  {
+    wins: 1,
+    free: { type: 'chips', amount: 10000, name: '10,000 ชิป', icon: '🪙', label: '10k ชิป' },
+    premium: { type: 'chips', amount: 120000, name: '100k ชิป + โบนัส 20%', icon: '💰', label: '100k ชิป (+20%)' }
+  },
+  {
+    wins: 3,
+    free: { type: 'chips', amount: 20000, name: '20,000 ชิป', icon: '🪙', label: '20k ชิป' },
+    premium: { type: 'chips', amount: 300000, name: '200k ชิป + โบนัส 50%', icon: '💰', label: '200k ชิป (+50%)' }
+  },
+  {
+    wins: 5,
+    free: { type: 'chips', amount: 30000, name: '30,000 ชิป', icon: '🪙', label: '30k ชิป' },
+    premium: { type: 'chips', amount: 1000000, name: '500k ชิป + โบนัส 100%', icon: '💰', label: '500k ชิป (+100%)' }
+  },
+  {
+    wins: 10,
+    free: { type: 'chips', amount: 50000, name: '50,000 ชิป', icon: '🪙', label: '50k ชิป' },
+    premium: { type: 'chips', amount: 12500000, name: '5m ชิป + โบนัส 150%', icon: '💰', label: '5m ชิป (+150%)' }
+  },
+  {
+    wins: 15,
+    free: { type: 'chips', amount: 100000, name: '100k ชิป', icon: '🪙', label: '100k ชิป' },
+    premium: { type: 'item', amount: 30, name: 'จิ๊กซอว์(สีเทา)ระดับธรรมดา 30 ชิ้น', icon: '🧩', label: 'จิ๊กซอว์เทา 30 ชิ้น' }
+  },
+  {
+    wins: 20,
+    free: { type: 'item', amount: 5, name: 'จิ๊กซอว์(สีเทา) ระดับธรรมดา 5 ชิ้น', icon: '🧩', label: 'จิ๊กซอว์เทา 5 ชิ้น' },
+    premium: { type: 'chips', amount: 75000000, name: '25m ชิป + โบนัส 200%', icon: '💰', label: '25m ชิป (+200%)' }
+  },
+  {
+    wins: 25,
+    free: { type: 'chips', amount: 250000, name: '250k ชิป', icon: '🪙', label: '250k ชิป' },
+    premium: { type: 'item', amount: 20, name: 'จิ๊กซอว์(สีฟ้า)ระดับหายาก 20 ชิ้น', icon: '🔷', label: 'จิ๊กซอว์ฟ้า 20 ชิ้น' }
+  },
+  {
+    wins: 30,
+    free: { type: 'item', amount: 1, name: 'สติ๊กเกอร์ จำกัดเวลา 3 วัน', icon: '🏷️', label: 'สติ๊กเกอร์', timed: '3 วัน' },
+    premium: { type: 'item', amount: 1, name: 'สติ๊กเกอร์ระดับพรีเมียมแบบถาวร', icon: '🌟', label: 'สติ๊กเกอร์ถาวร' }
+  },
+  {
+    wins: 40,
+    free: { type: 'item', amount: 1, name: 'มงกุฎ(หมวก) จำกัดเวลา 7 วัน', icon: '👑', label: 'มงกุฎหมวก', timed: '7 วัน' },
+    premium: { type: 'item', amount: 15, name: 'จิ๊กซอว์(สีชมพู)ระดับเลื่องชื่อ 15 ชิ้น', icon: '🌸', label: 'จิ๊กซอว์ชมพู 15 ชิ้น' }
+  },
+  {
+    wins: 50,
+    free: { type: 'item', amount: 1, name: 'กรอบโปรไฟล์ จำกัดเวลา 30 วัน', icon: '🖼️', label: 'กรอบโปรไฟล์', timed: '30 วัน' },
+    premium: { type: 'item', amount: 1, name: 'เซ็ตมงกุฎ+กรอบโปรไฟล์ระดับพรีเมียมแบบถาวร แถมจิ๊กซอว์(สีทอง)ระดับตำนาน 10 ชิ้น', icon: '👑', label: 'เซ็ตถาวร + ทอง 10ชิ้น' }
+  }
+];
 
 window.DiceGame = DiceGame;

@@ -459,3 +459,734 @@
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ==========================================================================
+   MILESTONE REWARDS (DUAL-TRACK PASS) STYLES
+   ========================================================================== */
+
+/* Stack Container on the left of bottom bar */
+.milestone-stack-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 20;
+}
+
+/* Top Widget Button: Milestone Rewards */
+.milestone-rewards-widget {
+  background: linear-gradient(180deg, #502b7f 0%, #2b1346 100%);
+  border: 3px solid #ffcc00;
+  border-radius: 24px;
+  padding: 5px 14px 5px 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 220px;
+}
+
+.milestone-rewards-widget:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: #ffe600;
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+}
+
+.milestone-rewards-icon-wrap {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd700 0%, #e67e22 100%);
+  border: 2.5px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.milestone-rewards-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.milestone-rewards-label {
+  font-weight: 800;
+  font-size: 14px;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.milestone-rewards-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #111;
+  background: #ffd700;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.milestone-rewards-subline {
+  font-size: 11px;
+  color: #ffccd5;
+  margin-top: 1px;
+}
+
+.milestone-claim-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #e74c3c;
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseGlow 1s infinite alternate;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Modal Window Widescreen Layout */
+.milestone-rewards-modal-window {
+  max-width: 980px;
+  width: 95vw;
+  background: linear-gradient(180deg, #371759 0%, #1c0a30 100%);
+  border: 4px solid #f1c40f;
+  box-shadow: 0 0 50px rgba(241, 196, 15, 0.4), 0 25px 60px rgba(0, 0, 0, 0.7);
+}
+
+/* Modal Header */
+.pass-modal-header {
+  background: linear-gradient(180deg, #5a2c8a 0%, #3a195e 100%);
+  border-bottom: 3px solid #f1c40f;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pass-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-pass-back {
+  background: radial-gradient(circle, #e74c3c 0%, #c0392b 100%) !important;
+  border: 2.5px solid #ffffff !important;
+  border-radius: 50% !important;
+  width: 38px !important;
+  height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-size: 18px !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4) !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease !important;
+  padding: 0 !important;
+}
+
+.btn-pass-back:hover {
+  transform: scale(1.1) !important;
+}
+
+.btn-add-ticket-mini {
+  background: #27ae60;
+  border: 1px solid #ffffff;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 13px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.slot-bonus-tag {
+  background: #e74c3c;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 6px;
+  margin-top: -2px;
+  border: 1px solid #ffd700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.pass-slot-card.is-current {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
+  animation: pulseGlow 1.5s infinite alternate;
+}
+
+.pass-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.pass-logo-text {
+  font-family: 'Lilita One', 'Fredoka', cursive;
+  font-size: 18px;
+  color: #ff8cb2;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.pass-title-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+}
+
+.pass-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Modal Body */
+.pass-modal-body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+/* Top Progress Track */
+.pass-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.pass-progress-header {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.pass-progress-bar-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.pass-crown-badge {
+  position: absolute;
+  left: 0;
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd700 0%, #e67e22 100%);
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.pass-progress-track {
+  width: 100%;
+  height: 20px;
+  background: #170929;
+  border-radius: 12px;
+  border: 3px solid #ffd700;
+  overflow: hidden;
+  margin-left: 20px;
+  position: relative;
+}
+
+.pass-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffcc00 0%, #ff9900 50%, #ffe680 100%);
+  transition: width 0.4s ease;
+  box-shadow: 0 0 12px rgba(255, 204, 0, 0.8);
+}
+
+.pass-track-mascot {
+  position: absolute;
+  top: -24px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.pass-track-mascot img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+  animation: mascotBob 2.5s infinite ease-in-out;
+}
+
+/* Tracks Main Grid Area */
+.pass-tracks-wrapper {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Left Fixed Labels Column */
+.pass-tracks-labels-col {
+  width: 95px;
+  min-width: 95px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Center: Single Unified Smooth Scroller */
+.pass-unified-scroller {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  border-radius: 18px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  cursor: grab;
+  user-select: none;
+  will-change: scroll-position;
+  transform: translateZ(0);
+}
+
+.pass-unified-scroller:active {
+  cursor: grabbing;
+}
+
+.pass-unified-scroller::-webkit-scrollbar {
+  height: 8px;
+}
+
+.pass-unified-scroller::-webkit-scrollbar-track {
+  background: rgba(23, 9, 41, 0.7);
+  border-radius: 8px;
+}
+
+.pass-unified-scroller::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #ffd700, #ff9900);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.pass-unified-scroll-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: max-content;
+  padding: 2px 2px 8px 2px;
+}
+
+.pass-track-row {
+  display: flex;
+  align-items: center;
+  border-radius: 18px;
+  padding: 8px 12px;
+  position: relative;
+  min-height: 114px;
+  box-sizing: border-box;
+}
+
+/* Premium Row */
+.pass-track-row.premium-row {
+  background: linear-gradient(90deg, #371253 0%, #4b1a72 50%, #290d3e 100%);
+  border: 2.5px solid #d4af37;
+  box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Free Row */
+.pass-track-row.free-row {
+  background: linear-gradient(90deg, #1b3d68 0%, #24578e 50%, #152e4e 100%);
+  border: 2.5px solid #5dade2;
+  box-shadow: inset 0 0 15px rgba(93, 173, 226, 0.3);
+}
+
+/* Track Header Labels (Left) */
+.track-label-card {
+  width: 95px;
+  min-width: 95px;
+  height: 114px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.premium-label-card {
+  background: linear-gradient(180deg, #571b7e 0%, #300a49 100%);
+  border: 2px solid #ffd700;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.premium-label-card .track-label-icon {
+  font-size: 26px;
+  margin-bottom: 2px;
+}
+
+.premium-label-card .track-label-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: #ffd700;
+  letter-spacing: 1px;
+}
+
+.free-label-card {
+  background: linear-gradient(180deg, #2874a6 0%, #154360 100%);
+  border: 2px solid #85c1e9;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.free-label-card .track-label-icon {
+  font-size: 26px;
+  margin-bottom: 2px;
+}
+
+.free-label-card .track-label-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+.track-slots-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: max-content;
+}
+
+/* Individual Slot Card */
+.pass-slot-card {
+  width: 92px;
+  min-width: 92px;
+  height: 98px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* Premium Slot */
+.pass-slot-card.premium-slot {
+  background: linear-gradient(180deg, #512270 0%, #290f3b 100%);
+  border: 2px solid #e5b842;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Free Slot */
+.pass-slot-card.free-slot {
+  background: linear-gradient(180deg, #215180 0%, #122e4d 100%);
+  border: 2px solid #7fb3d5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding-top: 12px;
+}
+
+.pass-slot-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Step Milestone Badge above free slot */
+.slot-milestone-marker {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, #f39c12 0%, #d35400 100%);
+  border: 2px solid #ffffff;
+  color: white;
+  font-family: var(--font-num);
+  font-size: 11px;
+  font-weight: 900;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  z-index: 5;
+}
+
+.chip-stack-icon {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.slot-icon {
+  font-size: 28px;
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.slot-label {
+  font-family: var(--font-game);
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 82px;
+}
+
+/* Claim / Status Buttons */
+.slot-status-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+.slot-status-badge.locked {
+  background: rgba(0, 0, 0, 0.5);
+  color: #bbb;
+  border: 1px solid #666;
+}
+
+.slot-status-badge.claimed {
+  background: #27ae60;
+  color: #fff;
+  border: 1px solid #2ecc71;
+}
+
+.slot-status-badge.timed {
+  background: #c0392b;
+  color: #fff;
+  border: 1px solid #e74c3c;
+}
+
+.btn-claim-slot {
+  background: linear-gradient(180deg, #ffcc00 0%, #f39c12 100%);
+  border: 1.5px solid #fff;
+  color: #5c3500;
+  font-family: var(--font-game);
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(243, 156, 18, 0.6);
+  animation: pulseGlow 1s infinite alternate;
+}
+
+.btn-claim-slot:hover {
+  transform: scale(1.08);
+}
+
+/* Premium Chains & Padlock Overlay when locked */
+.premium-locked-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 6, 28, 0.82);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  pointer-events: auto;
+}
+
+.premium-locked-overlay.unlocked {
+  display: none !important;
+}
+
+/* Golden Chain Graphics */
+.chain-decor {
+  width: 100%;
+  height: 12px;
+  background: repeating-linear-gradient(45deg, #ffd700, #ffd700 10px, #b8860b 10px, #b8860b 20px);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+  opacity: 0.85;
+}
+
+.chain-top {
+  position: absolute;
+  top: 15px;
+  transform: rotate(-2deg);
+}
+
+.chain-bottom {
+  position: absolute;
+  bottom: 15px;
+  transform: rotate(2deg);
+}
+
+.lock-shield {
+  background: linear-gradient(180deg, #441a66 0%, #200835 100%);
+  border: 2px solid #ffd700;
+  border-radius: 18px;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 12;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+}
+
+.big-padlock-icon {
+  font-size: 26px;
+  filter: drop-shadow(0 2px 6px rgba(255, 215, 0, 0.8));
+}
+
+.lock-shield-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  color: #ffd700;
+}
+
+.lock-shield-sub {
+  font-size: 11px;
+  color: #ffccd5;
+}
+
+/* Grand Final Preview Card (Right Side in Mockup) */
+.pass-grand-preview-card {
+  width: 140px;
+  min-width: 140px;
+  background: linear-gradient(180deg, #fff7e6 0%, #fed7e2 100%);
+  border: 3px solid #ffcc00;
+  border-radius: 20px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  text-align: center;
+}
+
+.grand-preview-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.grand-preview-icon-wrap {
+  font-size: 30px;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25));
+}
+
+.grand-preview-text {
+  font-family: var(--font-game);
+  font-size: 10px;
+  font-weight: 800;
+  color: #4a154b;
+  line-height: 1.1;
+}
+
+/* Pass Modal Footer */
+.pass-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+}
+
+.pass-scroll-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-pass-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #4a2575;
+  border: 2px solid #ffd700;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease;
+}
+
+.btn-pass-arrow:hover {
+  transform: scale(1.1);
+  background: #6a35a5;
+}
+
+/* Giant Pink/Gold Unlock Button (Mockup Bottom Right) */
+.btn-unlock-premium {
+  background: linear-gradient(180deg, #ff4081 0%, #e91e63 50%, #c2185b 100%);
+  border: 3px solid #fff5cc;
+  border-radius: 30px;
+  padding: 8px 30px;
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5), inset 0 2px 4px rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn-unlock-premium:hover {
+  transform: scale(1.04);
+  filter: brightness(1.1);
+}
+
+.btn-unlock-premium.unlocked-state {
+  background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+  border-color: #d5f5e3;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+  cursor: default;
+}
+
