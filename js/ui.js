@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   function updateUI() {
     elCoins.textContent = game.state.coins.toLocaleString();
-    elTickets.textContent = game.state.tickets;
+    elTickets.textContent = game.state.tickets.toLocaleString();
 
     // Milestone Progress
     const wins = game.state.milestoneWins;
@@ -127,15 +127,28 @@ document.addEventListener('DOMContentLoaded', () => {
       promoStatusText.innerHTML = `“ยินดีด้วย! คุณสะสมครบ 50 ขั้นและรับกรอบโปรไฟล์ถาวรเรียบร้อยแล้ว!”`;
       promoOriginalStrike.style.display = 'none';
       btnPromoBuyDeal.disabled = true;
+      btnPromoBuyDeal.classList.remove('require-premium');
       btnPromoBuyDeal.classList.add('purchased-state');
       promoBuyDealText.textContent = 'รับรางวัลครบแล้ว ✓';
       promoDetailNote.textContent = 'คุณได้รับกรอบโปรไฟล์ถาวรและไอเทมทั้งหมดครบ 50 ขั้นแล้ว!';
-    } else {
+    } else if (!game.state.isPremiumUnlocked) {
+      // Must unlock Premium 369 THB first!
       promoStatusText.innerHTML = `“คุณยังขาดอีก <span id="promo-missing-count" class="promo-highlight-count">${remaining}</span> ขั้นเพื่อรับกรอบโปรไฟล์ถาวร”`;
       promoOriginalStrike.style.display = 'inline-block';
       promoOriginalStrike.textContent = `${priceInfo.originalPrice} บาท`;
       btnPromoBuyDeal.disabled = false;
       btnPromoBuyDeal.classList.remove('purchased-state');
+      btnPromoBuyDeal.classList.add('require-premium');
+      promoBuyDealText.innerHTML = '🔒 ปลดล็อก Premium 369 THB ก่อน ✨';
+      promoDetailNote.innerHTML = '<span style="color: #be185d; font-weight: bold;">⚠️ เฉพาะผู้ที่ปลดล็อก Premium 369 THB จึงจะสามารถเหมาได้</span>';
+    } else {
+      // Premium unlocked, can buy bundle!
+      promoStatusText.innerHTML = `“คุณยังขาดอีก <span id="promo-missing-count" class="promo-highlight-count">${remaining}</span> ขั้นเพื่อรับกรอบโปรไฟล์ถาวร”`;
+      promoOriginalStrike.style.display = 'inline-block';
+      promoOriginalStrike.textContent = `${priceInfo.originalPrice} บาท`;
+      btnPromoBuyDeal.disabled = false;
+      btnPromoBuyDeal.classList.remove('purchased-state');
+      btnPromoBuyDeal.classList.remove('require-premium');
       promoBuyDealText.textContent = `เหมาเลย ${priceInfo.promoPrice} บาท`;
       promoDetailNote.textContent = 'เหมาของรางวัลทั้งหมดที่เหลือจนถึงขั้นที่ 50 ทันที!';
     }
@@ -204,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Execute duel logic
     const duel = game.executeDuel();
     // Only update ticket display immediately; keep button text until animation finishes!
-    elTickets.textContent = game.state.tickets;
+    elTickets.textContent = game.state.tickets.toLocaleString();
 
     // Animate Mascots
     mascotSystem.classList.add('active-cheer');
@@ -261,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   function renderMilestoneRewards() {
     passCoinVal.textContent = game.state.coins.toLocaleString();
-    passTicketVal.textContent = game.state.tickets;
+    passTicketVal.textContent = game.state.tickets.toLocaleString();
 
     const wins = Math.min(50, game.state.milestoneWins);
     passProgressText.textContent = `MILESTONE PROGRESS: ${wins} / 50`;
@@ -628,12 +641,27 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('🌟 คุณสะสมของรางวัลครบ 50 ขั้นเรียบร้อยแล้ว!');
         return;
       }
+
+      // Must have unlocked Premium 369 THB first!
+      if (!game.state.isPremiumUnlocked) {
+        sound.playLose();
+        showToast('🔒 ต้องปลดล็อก Premium 369 THB ก่อน จึงจะสามารถใช้สิทธิ์เหมา 199 บาทได้!');
+        closeModal(modalLastChancePromo);
+        setTimeout(() => {
+          renderMilestoneRewards();
+          openModal(modalMilestoneRewards);
+        }, 280);
+        return;
+      }
+
       sound.playSpecialPack();
       dice3d.spawnConfetti(160);
       const res = game.purchaseLastChanceBundle();
-      updateUI();
-      renderLastChanceModal();
-      showToast(`🎉 เหมาสำเร็จ! (${res.price} บาท) ปลดล็อกครบ 50 ขั้น ได้รับกรอบโปรไฟล์ถาวร & ชิป ${res.totalChipsAdded.toLocaleString()} ชิป!`, 3500);
+      if (res.success) {
+        updateUI();
+        renderLastChanceModal();
+        showToast(`🎉 เหมาสำเร็จ! (${res.price} บาท) ปลดล็อกครบ 50 ขั้น ได้รับกรอบโปรไฟล์ถาวร & ชิป ${res.totalChipsAdded.toLocaleString()} ชิป!`, 3500);
+      }
     });
   }
 

@@ -9,9 +9,9 @@
     content="มินิเกมทอยเต๋าดวลคะแนนกับระบบ (PvE) สุ่มแต้ม 1-12 ลุ้นเสมอได้ Free Roll และสะสมชัยชนะครบ 50 ครั้งรับ Special Pack สุดพิเศษ!">
 
   <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="css/style.css?v=3">
-  <link rel="stylesheet" href="css/dice.css?v=3">
-  <link rel="stylesheet" href="css/modals.css?v=3">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/dice.css?v=4">
+  <link rel="stylesheet" href="css/modals.css?v=4">
 </head>
 
 <body>
@@ -45,13 +45,13 @@
         <!-- Coin Pill -->
         <div class="resource-pill coin-pill" title="ยอดเหรียญทอง">
           <div class="resource-icon coin-icon">🪙</div>
-          <span id="coin-value" class="resource-value">12,580</span>
+          <span id="coin-value" class="resource-value">50,000</span>
         </div>
 
         <!-- Ticket Pill -->
         <div class="resource-pill ticket-pill" title="ตั๋วสำหรับทอยเต๋า">
           <div class="resource-icon ticket-icon">🎫</div>
-          <span id="ticket-value" class="resource-value">5</span>
+          <span id="ticket-value" class="resource-value">10,000</span>
           <button id="btn-add-ticket" class="btn-add-ticket" title="ซื้อตั๋วเพิ่ม">+</button>
         </div>
 
@@ -205,10 +205,12 @@
          ========================================== -->
     <footer class="bottom-bar">
       <!-- Milestone Counter Box (Milestone Reward Pass) -->
-      <div id="milestone-widget" class="milestone-widget" title="คลิกเพื่อดู Milestone Reward & Battle Pass (Free & Premium)">
+      <div id="milestone-widget" class="milestone-widget"
+        title="คลิกเพื่อดู Milestone Reward & Battle Pass (Free & Premium)">
         <img src="assets/images/chest.png" alt="Chest" class="milestone-chest-icon">
         <div class="milestone-header" style="justify-content: flex-start !important; gap: 6px !important;">
-          <span class="milestone-title">Milestone <span class="milestone-badge" style="color: #ffd700; margin-left: 2px;">Reward</span></span>
+          <span class="milestone-title">Milestone <span class="milestone-badge"
+              style="color: #ffd700; margin-left: 2px;">Reward</span></span>
         </div>
         <div class="progress-track">
           <div id="milestone-bar" class="progress-fill" style="width: 0%;"></div>
@@ -259,11 +261,11 @@
         <div class="pass-header-right">
           <div class="currency-badge coin-badge">
             <span class="currency-icon">🪙</span>
-            <span id="pass-coin-val" class="currency-val">12,580</span>
+            <span id="pass-coin-val" class="currency-val">50,000</span>
           </div>
           <div class="currency-badge ticket-badge">
             <span class="currency-icon">🎟️</span>
-            <span id="pass-ticket-val" class="currency-val">5</span>
+            <span id="pass-ticket-val" class="currency-val">10,000</span>
             <button class="btn-add-ticket-mini" id="btn-pass-add-ticket">+</button>
           </div>
           <button class="btn-modal-close" style="font-size: 26px; margin-left: 8px;">&times;</button>
@@ -353,7 +355,8 @@
           <div class="pass-scroll-nav">
             <button id="btn-pass-prev" class="btn-pass-arrow" title="เลื่อนซ้าย">◀</button>
             <button id="btn-pass-next" class="btn-pass-arrow" title="เลื่อนขวา">▶</button>
-            <span style="font-size: 11px; color: #ffccd5; margin-left: 6px;">เลื่อนดูรางวัลทั้ง 10 ขั้น (1, 3, 5, 10, 15, 20, 25, 30, 40, 50 ชนะ)</span>
+            <span style="font-size: 11px; color: #ffccd5; margin-left: 6px;">เลื่อนดูรางวัลทั้ง 10 ขั้น (1, 3, 5, 10,
+              15, 20, 25, 30, 40, 50 ชนะ)</span>
           </div>
 
           <button id="btn-unlock-premium" class="btn-unlock-premium">
@@ -518,7 +521,7 @@
       <div class="modal-body" style="text-align: center;">
         <h3 style="color: #ffd700; margin-bottom: 8px;">Dice Party Web Prototype</h3>
         <p style="font-size: 14px; color: #eeddff; margin-bottom: 20px;">
-          เวอร์ชัน 1.0 (PvE Minigame) พัฒนาตาม Requirement สำหรับทดสอบบนเบราว์เซอร์
+          <!--เวอร์ชัน 1.0 (PvE Minigame) พัฒนาตาม Requirement สำหรับทดสอบบนเบราว์เซอร์-->
         </p>
 
         <button id="btn-reset-game" class="btn-buy"
@@ -565,7 +568,8 @@
         <!-- Dynamic Offer Text -->
         <div class="promo-message-box">
           <div id="promo-status-text" class="promo-main-quote">
-            “คุณยังขาดอีก <span id="promo-missing-count" class="promo-highlight-count">10</span> ขั้นเพื่อรับกรอบโปรไฟล์ถาวร”
+            “คุณยังขาดอีก <span id="promo-missing-count" class="promo-highlight-count">10</span>
+            ขั้นเพื่อรับกรอบโปรไฟล์ถาวร”
           </div>
         </div>
 
@@ -599,16 +603,26 @@
     </div>
     <div class="dev-actions">
       <!-- Dev Tools Actions (Single Unified Bar) -->
-      <button id="dev-open-lastchance" class="dev-btn" style="border-color: #e040fb; background: #6a1b9a; color: #fff; font-weight: bold;">🎁 เปิด Pop-up โค้งสุดท้าย</button>
-      <button id="dev-sim-missing-8" class="dev-btn" style="border-color: #ffd700; background: #4a148c; color: #ffd700;">✨ จำลอง: Premium + ขาด 8 ขั้น (Wins=3)</button>
-      <button id="dev-sim-missing-10" class="dev-btn" style="border-color: #ffd700; background: #4a148c; color: #ffd700;">✨ จำลอง: Premium + ขาด 10 ขั้น (Wins=0)</button>
-      <button id="dev-sim-completed" class="dev-btn" style="border-color: #2ecc71; background: #1b5e20; color: #a5d6a7;">🏁 จำลอง: เล่นครบ 50 ขั้นแล้ว</button>
-      <button id="dev-toggle-premium" class="dev-btn" style="border-color: #f1c40f; background: #512270; color: #ffd700;">👑 สลับ ปลดล็อก/ล็อค Premium</button>
+      <button id="dev-open-lastchance" class="dev-btn"
+        style="border-color: #e040fb; background: #6a1b9a; color: #fff; font-weight: bold;">🎁 เปิด Pop-up
+        โค้งสุดท้าย</button>
+      <button id="dev-sim-missing-8" class="dev-btn"
+        style="border-color: #ffd700; background: #4a148c; color: #ffd700;">✨ จำลอง: Premium + ขาด 8 ขั้น
+        (Wins=3)</button>
+      <button id="dev-sim-missing-10" class="dev-btn"
+        style="border-color: #ffd700; background: #4a148c; color: #ffd700;">✨ จำลอง: Premium + ขาด 10 ขั้น
+        (Wins=0)</button>
+      <button id="dev-sim-completed" class="dev-btn"
+        style="border-color: #2ecc71; background: #1b5e20; color: #a5d6a7;">🏁 จำลอง: เล่นครบ 50 ขั้นแล้ว</button>
+      <button id="dev-toggle-premium" class="dev-btn"
+        style="border-color: #f1c40f; background: #512270; color: #ffd700;">👑 สลับ ปลดล็อก/ล็อค Premium</button>
       <button id="dev-force-win" class="dev-btn" style="border-color: #2ecc71;">⚡ ล็อคผล: ชนะ (WIN)</button>
-      <button id="dev-force-draw" class="dev-btn" style="border-color: #00d2ff;">⚡ ล็อคผล: เสมอ (DRAW -> Free Roll)</button>
+      <button id="dev-force-draw" class="dev-btn" style="border-color: #00d2ff;">⚡ ล็อคผล: เสมอ (DRAW -> Free
+        Roll)</button>
       <button id="dev-force-lose" class="dev-btn" style="border-color: #e74c3c;">⚡ ล็อคผล: แพ้ (LOSE)</button>
       <button id="dev-add-10wins" class="dev-btn">+10 Wins Milestone</button>
-      <button id="dev-set-49wins" class="dev-btn" style="background: #e67e22; font-weight: 900;">🔥 ตั้งเป็น 49 ชนะ (ทดสอบ Milestone 50)</button>
+      <button id="dev-set-49wins" class="dev-btn" style="background: #e67e22; font-weight: 900;">🔥 ตั้งเป็น 49 ชนะ
+        (ทดสอบ Milestone 50)</button>
       <button id="dev-reset-milestone-wins" class="dev-btn">🔄 รีเซ็ต Wins เป็น 0</button>
       <button id="dev-add-tickets" class="dev-btn">+10 Tickets</button>
       <button id="dev-add-coins" class="dev-btn">+5,000 Coins</button>

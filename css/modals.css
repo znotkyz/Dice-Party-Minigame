@@ -1528,6 +1528,26 @@
   cursor: default;
 }
 
+.btn-promo-buy-deal.require-premium {
+  background: linear-gradient(180deg, #ff4081 0%, #e91e63 50%, #c2185b 100%);
+  border-color: #fff9db;
+  box-shadow: 0 10px 28px rgba(233, 30, 99, 0.6), inset 0 3px 6px rgba(255, 255, 255, 0.9);
+}
+
+.btn-promo-buy-deal.require-premium:hover {
+  transform: scale(1.06);
+  filter: brightness(1.1);
+  box-shadow: 0 14px 34px rgba(233, 30, 99, 0.75), inset 0 4px 8px rgba(255, 255, 255, 0.95);
+}
+
+.btn-promo-buy-deal.require-premium .promo-btn-text {
+  text-shadow: -1.5px -1.5px 0 #880e4f,
+                1.5px -1.5px 0 #880e4f,
+               -1.5px  1.5px 0 #880e4f,
+                1.5px  1.5px 0 #880e4f,
+                0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
 .promo-btn-text {
   font-family: var(--font-game);
   font-size: 24px;

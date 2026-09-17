@@ -5,12 +5,12 @@
 
 class DiceGame {
   constructor() {
-    this.STORAGE_KEY = 'dice_party_minigame_save_v2';
+    this.STORAGE_KEY = 'dice_party_minigame_save_v3';
 
-    // Default State (matches mockup balances with milestone starting at 0)
+    // Default State: Chip 50,000, Ticket 10,000
     this.state = {
-      coins: 12580,
-      tickets: 5,
+      coins: 50000,
+      tickets: 10000,
       milestoneWins: 0, // Starts at 0
       milestoneTarget: 50,
       freeRollActive: false,
@@ -31,13 +31,16 @@ class DiceGame {
 
   loadState() {
     try {
-      // Clear old v1 save if present so 15 doesn't persist
+      // Clear old saves if present so new default balance takes effect
       localStorage.removeItem('dice_party_minigame_save_v1');
+      localStorage.removeItem('dice_party_minigame_save_v2');
 
       const saved = localStorage.getItem(this.STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         this.state = { ...this.state, ...parsed };
+      } else {
+        this.saveState();
       }
     } catch (e) {
       console.warn('Could not load saved game state', e);
@@ -321,10 +324,13 @@ class DiceGame {
    * unlocks premium, and sets milestoneWins to 50.
    */
   purchaseLastChanceBundle() {
+    if (!this.state.isPremiumUnlocked) {
+      return { success: false, reason: 'PREMIUM_REQUIRED' };
+    }
+
     const priceInfo = this.calculateLastChancePrice();
     const remainingSteps = priceInfo.remainingSteps;
 
-    this.state.isPremiumUnlocked = true;
     this.state.milestoneWins = 50;
     this.state.lastChancePurchased = true;
 
@@ -368,8 +374,8 @@ class DiceGame {
   resetAll() {
     localStorage.removeItem(this.STORAGE_KEY);
     this.state = {
-      coins: 12580,
-      tickets: 5,
+      coins: 50000,
+      tickets: 10000,
       milestoneWins: 0,
       milestoneTarget: 50,
       freeRollActive: false,
