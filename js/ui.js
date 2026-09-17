@@ -49,13 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
     elMilestoneBar.style.width = `${pct}%`;
     elMilestoneText.textContent = `${wins} / ${target}`;
 
-    // Roll button mode
+    // Roll button mode (always uses the classic orange-gold frame)
     if (game.state.freeRollActive) {
-      btnRoll.classList.add('free-roll-mode');
       btnRollText.textContent = 'FREE ROLL!';
-      btnRollSub.textContent = 'NO TICKET NEEDED';
+      btnRollSub.textContent = 'No ticket needed';
     } else {
-      btnRoll.classList.remove('free-roll-mode');
       btnRollText.textContent = 'ROLL!';
       btnRollSub.textContent = 'USE 1 TICKET';
     }
@@ -123,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Execute duel logic
     const duel = game.executeDuel();
-    updateUI(); // Updates ticket count / free roll label immediately
+    // Only update ticket display immediately; keep button text until animation finishes!
+    elTickets.textContent = game.state.tickets;
 
     // Animate Mascots
     mascotSystem.classList.add('active-cheer');
@@ -132,19 +131,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Partition Player's score for 3D visual dice
     const playerDice = Dice3DSystem.partitionScore(duel.playerScore);
 
-    // Step 1: System and 3D Dice begin rolling in parallel
-    const systemFlickerPromise = animateScoreFlicker(elSystemScore, duel.systemScore, 850);
-    const diceRollPromise = dice3d.rollDice(playerDice.d1, playerDice.d2, 1300);
-
-    // Wait for System Score to lock in
-    await systemFlickerPromise;
-
-    // Step 2: Player Score locks in shortly after dice settle
-    await diceRollPromise;
-    await animateScoreFlicker(elPlayerScore, duel.playerScore, 400);
+    // Step 1: System, Player score flickers, and 3D Dice all roll simultaneously and stop together!
+    const ROLL_DURATION = 1200;
+    await Promise.all([
+      animateScoreFlicker(elSystemScore, duel.systemScore, ROLL_DURATION),
+      animateScoreFlicker(elPlayerScore, duel.playerScore, ROLL_DURATION),
+      dice3d.rollDice(playerDice.d1, playerDice.d2, ROLL_DURATION)
+    ]);
 
     mascotSystem.classList.remove('active-cheer');
     mascotPlayer.classList.remove('active-cheer');
+
+    // Brief 250ms pause so the player sees the locked numbers before the result banner appears
+    await new Promise(r => setTimeout(r, 250));
 
     // Step 3: Present Resolution
     if (duel.result === 'WIN') {
@@ -164,8 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // DRAW -> Free Roll!
       sound.playDraw();
       elResultBadge.className = 'result-badge draw';
-      elResultBadge.textContent = '⚡ DRAW! FREE ROLL! ⚡';
-      elResultSub.textContent = 'แต้มเท่ากัน! ได้รับสิทธิ์ทอยฟรี 1 ครั้งทันที';
+      elResultBadge.textContent = 'เสมอ';
+      elResultSub.textContent = 'แต้มเท่ากับเผือก ทอยฟรี 1 ครั้ง';
       elResultBanner.classList.add('show');
     }
 

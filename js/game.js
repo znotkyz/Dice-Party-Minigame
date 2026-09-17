@@ -5,17 +5,17 @@
 
 class DiceGame {
   constructor() {
-    this.STORAGE_KEY = 'dice_party_minigame_save_v1';
+    this.STORAGE_KEY = 'dice_party_minigame_save_v2';
 
-    // Default State (matches mockup balances)
+    // Default State (matches mockup balances with milestone starting at 0)
     this.state = {
       coins: 12580,
       tickets: 5,
-      milestoneWins: 15, // Initial demonstration progress towards 50
+      milestoneWins: 0, // Starts at 0
       milestoneTarget: 50,
       freeRollActive: false,
       totalDuels: 0,
-      totalWins: 15,
+      totalWins: 0,
       history: [],
       specialPackClaimed: false,
       forcedOutcome: null // For Dev Tools testing ('win' | 'lose' | 'draw' | null)
@@ -26,6 +26,9 @@ class DiceGame {
 
   loadState() {
     try {
+      // Clear old v1 save if present so 15 doesn't persist
+      localStorage.removeItem('dice_party_minigame_save_v1');
+
       const saved = localStorage.getItem(this.STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -201,11 +204,11 @@ class DiceGame {
     this.state = {
       coins: 12580,
       tickets: 5,
-      milestoneWins: 15,
+      milestoneWins: 0,
       milestoneTarget: 50,
       freeRollActive: false,
       totalDuels: 0,
-      totalWins: 15,
+      totalWins: 0,
       history: [],
       specialPackClaimed: false,
       forcedOutcome: null
