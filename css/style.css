@@ -59,7 +59,7 @@ body {
   height: 100vh;
   max-height: 640px;
   background: radial-gradient(circle at 50% 30%, #fff6e8 0%, #fed5e2 40%, #d8b4e2 75%, #a58bc2 100%);
-  background-image: 
+  background-image:
     radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.4) 0%, rgba(254, 213, 226, 0.25) 40%, rgba(165, 139, 194, 0.5) 100%),
     url('../assets/images/carnival_bg_clean.jpg');
   background-size: cover;
@@ -163,7 +163,7 @@ body {
 }
 
 .game-logo {
-  height: 65px;
+  height: 150px;
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
   animation: logoFloat 4s infinite ease-in-out;
 }
@@ -241,7 +241,7 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   transition: transform 0.15s ease;
 }
 
@@ -314,7 +314,7 @@ body {
   padding: 8px 12px 12px 12px;
   text-align: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
-  margin-top: 18px;
+  margin-top: -25px;
   transition: transform 0.3s ease;
 }
 
@@ -334,7 +334,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* System Board */
@@ -604,7 +604,7 @@ body {
   border-radius: 45px;
   padding: 12px 55px;
   cursor: pointer;
-  box-shadow: 
+  box-shadow:
     0 10px 0 #941700,
     0 16px 28px rgba(0, 0, 0, 0.45),
     inset 0 4px 8px rgba(255, 255, 255, 0.6);
@@ -617,7 +617,8 @@ body {
 }
 
 /* Wing Ornaments */
-.btn-roll::before, .btn-roll::after {
+.btn-roll::before,
+.btn-roll::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -626,7 +627,7 @@ body {
   height: 28px;
   background: radial-gradient(circle, #ffe680 0%, #e6a100 100%);
   border: 2.5px solid #ffffff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .btn-roll::before {
@@ -641,7 +642,7 @@ body {
 
 .btn-roll:hover:not(:disabled) {
   transform: translateY(-3px) scale(1.03);
-  box-shadow: 
+  box-shadow:
     0 13px 0 #941700,
     0 20px 32px rgba(0, 0, 0, 0.5),
     inset 0 4px 10px rgba(255, 255, 255, 0.8);
@@ -649,7 +650,7 @@ body {
 
 .btn-roll:active:not(:disabled) {
   transform: translateY(6px);
-  box-shadow: 
+  box-shadow:
     0 4px 0 #941700,
     0 8px 16px rgba(0, 0, 0, 0.3),
     inset 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -667,7 +668,7 @@ body {
   font-weight: 900;
   letter-spacing: 2px;
   color: #ffffff;
-  text-shadow: 
+  text-shadow:
     0 3px 0 #941700,
     0 4px 8px rgba(0, 0, 0, 0.5);
   line-height: 1;
@@ -677,7 +678,7 @@ body {
   font-size: 13px;
   font-weight: 700;
   color: #fff6d9;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   margin-top: 2px;
 }
 
@@ -749,35 +750,77 @@ body {
    KEYFRAME ANIMATIONS
    ========================================================================== */
 @keyframes mascotBob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(1deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
 }
 
 @keyframes logoFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 @keyframes starTwinkle {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
-  50% { transform: scale(1.25) rotate(15deg); opacity: 1; }
+
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.25) rotate(15deg);
+    opacity: 1;
+  }
 }
 
 @keyframes sparkleTwinkle {
-  0%, 100% { transform: scale(0.4) rotate(0deg); opacity: 0.3; }
-  50% { transform: scale(1.1) rotate(45deg); opacity: 1; }
+
+  0%,
+  100% {
+    transform: scale(0.4) rotate(0deg);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.1) rotate(45deg);
+    opacity: 1;
+  }
 }
 
 
 
 @keyframes numberPulse {
-  0% { transform: scale(0.95); }
-  100% { transform: scale(1.1); }
+  0% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
 }
 
 @keyframes pulseGlow {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.05); }
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.05);
+  }
 }
 
 /* ==========================================================================
@@ -788,35 +831,45 @@ body {
     border-radius: 0;
     max-height: 100vh;
   }
+
   .battle-arena {
     padding: 0 15px;
   }
+
   .fighter-side {
     width: 160px;
   }
+
   .mascot-wrapper {
     width: 140px;
     height: 130px;
   }
+
   .score-board {
     width: 140px;
   }
+
   .board-score {
     font-size: 38px;
   }
+
   .stage-center {
     width: 280px;
   }
+
   .pedestal-platform {
     width: 220px;
     height: 65px;
   }
+
   .btn-roll {
     padding: 10px 38px;
   }
+
   .btn-roll-text {
     font-size: 30px;
   }
+
   .milestone-widget {
     min-width: 170px;
     padding-left: 55px;
