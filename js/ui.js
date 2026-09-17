@@ -47,9 +47,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalHistory = document.getElementById('modal-history');
   const modalHelp = document.getElementById('modal-help');
   const modalHome = document.getElementById('modal-home');
+  const modalLastChancePromo = document.getElementById('modal-last-chance-promo');
   const historyTableBody = document.getElementById('history-table-body');
   const devPanel = document.getElementById('dev-panel');
   const toastMsg = document.getElementById('toast-msg');
+
+  // Last-Chance Promo Elements
+  const btnPromoLastChance = document.getElementById('btn-promo-lastchance');
+  const saleBadgeTimer = document.getElementById('sale-badge-timer');
+  const promoTimerCountdown = document.getElementById('promo-timer-countdown');
+  const promoStatusText = document.getElementById('promo-status-text');
+  const promoOriginalStrike = document.getElementById('promo-original-strike');
+  const btnPromoBuyDeal = document.getElementById('btn-promo-buy-deal');
+  const promoBuyDealText = document.getElementById('promo-buy-deal-text');
+  const promoDetailNote = document.getElementById('promo-detail-note');
 
   let isRolling = false;
 
@@ -86,6 +97,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update modal if currently visible
     if (modalMilestoneRewards && modalMilestoneRewards.classList.contains('active')) {
       renderMilestoneRewards();
+    }
+    if (modalLastChancePromo && modalLastChancePromo.classList.contains('active')) {
+      renderLastChanceModal();
+    }
+  }
+
+  // Live Event Countdown Timer (starts at 71:59:59)
+  let promoSecondsLeft = 71 * 3600 + 59 * 60 + 59;
+  function updatePromoTimer() {
+    if (promoSecondsLeft > 0) {
+      promoSecondsLeft--;
+    }
+    const h = Math.floor(promoSecondsLeft / 3600);
+    const m = Math.floor((promoSecondsLeft % 3600) / 60);
+    const s = promoSecondsLeft % 60;
+    const timeStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    if (saleBadgeTimer) saleBadgeTimer.textContent = timeStr;
+    if (promoTimerCountdown) promoTimerCountdown.textContent = timeStr;
+  }
+  setInterval(updatePromoTimer, 1000);
+  updatePromoTimer();
+
+  function renderLastChanceModal() {
+    const priceInfo = game.calculateLastChancePrice();
+    const remaining = priceInfo.remainingSteps;
+
+    if (game.state.milestoneWins >= 50) {
+      promoStatusText.innerHTML = `“ยินดีด้วย! คุณสะสมครบ 50 ขั้นและรับกรอบโปรไฟล์ถาวรเรียบร้อยแล้ว!”`;
+      promoOriginalStrike.style.display = 'none';
+      btnPromoBuyDeal.disabled = true;
+      btnPromoBuyDeal.classList.add('purchased-state');
+      promoBuyDealText.textContent = 'รับรางวัลครบแล้ว ✓';
+      promoDetailNote.textContent = 'คุณได้รับกรอบโปรไฟล์ถาวรและไอเทมทั้งหมดครบ 50 ขั้นแล้ว!';
+    } else {
+      promoStatusText.innerHTML = `“คุณยังขาดอีก <span id="promo-missing-count" class="promo-highlight-count">${remaining}</span> ขั้นเพื่อรับกรอบโปรไฟล์ถาวร”`;
+      promoOriginalStrike.style.display = 'inline-block';
+      promoOriginalStrike.textContent = `${priceInfo.originalPrice} บาท`;
+      btnPromoBuyDeal.disabled = false;
+      btnPromoBuyDeal.classList.remove('purchased-state');
+      promoBuyDealText.textContent = `เหมาเลย ${priceInfo.promoPrice} บาท`;
+      promoDetailNote.textContent = 'เหมาของรางวัลทั้งหมดที่เหลือจนถึงขั้นที่ 50 ทันที!';
     }
   }
 
@@ -559,6 +611,89 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('dev-close').addEventListener('click', () => {
     devPanel.classList.remove('open');
   });
+
+  // Last-Chance Promo Button (Sale Badge)
+  if (btnPromoLastChance) {
+    btnPromoLastChance.addEventListener('click', () => {
+      sound.playClick();
+      renderLastChanceModal();
+      openModal(modalLastChancePromo);
+    });
+  }
+
+  // Last-Chance Promo Buy Button
+  if (btnPromoBuyDeal) {
+    btnPromoBuyDeal.addEventListener('click', () => {
+      if (game.state.milestoneWins >= 50) {
+        showToast('🌟 คุณสะสมของรางวัลครบ 50 ขั้นเรียบร้อยแล้ว!');
+        return;
+      }
+      sound.playSpecialPack();
+      dice3d.spawnConfetti(160);
+      const res = game.purchaseLastChanceBundle();
+      updateUI();
+      renderLastChanceModal();
+      showToast(`🎉 เหมาสำเร็จ! (${res.price} บาท) ปลดล็อกครบ 50 ขั้น ได้รับกรอบโปรไฟล์ถาวร & ชิป ${res.totalChipsAdded.toLocaleString()} ชิป!`, 3500);
+    });
+  }
+
+  // Dev Tools: Last-Chance Simulation Tools
+  const devOpenLastChance = document.getElementById('dev-open-lastchance');
+  if (devOpenLastChance) {
+    devOpenLastChance.addEventListener('click', () => {
+      renderLastChanceModal();
+      openModal(modalLastChancePromo);
+      showToast('🎁 Dev: เปิด Pop-up ข้อเสนอโค้งสุดท้าย');
+    });
+  }
+
+  const devSimMissing8 = document.getElementById('dev-sim-missing-8');
+  if (devSimMissing8) {
+    devSimMissing8.addEventListener('click', () => {
+      game.state.isPremiumUnlocked = true;
+      game.state.milestoneWins = 3; // 8 steps remaining (5, 10, 15, 20, 25, 30, 40, 50)
+      game.saveState();
+      updateUI();
+      renderLastChanceModal();
+      openModal(modalLastChancePromo);
+      showToast('✨ Dev: จำลอง Premium + ขาด 8 ขั้น (Wins=3, เหมา 199.-)');
+    });
+  }
+
+  const devSimMissing10 = document.getElementById('dev-sim-missing-10');
+  if (devSimMissing10) {
+    devSimMissing10.addEventListener('click', () => {
+      game.state.isPremiumUnlocked = true;
+      game.state.milestoneWins = 0; // 10 steps remaining
+      game.saveState();
+      updateUI();
+      renderLastChanceModal();
+      openModal(modalLastChancePromo);
+      showToast('✨ Dev: จำลอง Premium + ขาด 10 ขั้น (Wins=0, เหมา 199.-)');
+    });
+  }
+
+  const devSimCompleted = document.getElementById('dev-sim-completed');
+  if (devSimCompleted) {
+    devSimCompleted.addEventListener('click', () => {
+      game.state.isPremiumUnlocked = true;
+      game.state.milestoneWins = 50;
+      game.saveState();
+      updateUI();
+      renderLastChanceModal();
+      openModal(modalLastChancePromo);
+      showToast('🏁 Dev: จำลอง ผู้เล่นครบ 50 ขั้นแล้ว');
+    });
+  }
+
+  // Auto-popup for eligible players (Premium 369 bought, within 3 days, milestone < 50)
+  if (game.isLastChanceEligible() && !sessionStorage.getItem('last_chance_promo_popup_shown')) {
+    setTimeout(() => {
+      sessionStorage.setItem('last_chance_promo_popup_shown', 'true');
+      renderLastChanceModal();
+      openModal(modalLastChancePromo);
+    }, 1200);
+  }
 
   // Initial render
   updateUI();

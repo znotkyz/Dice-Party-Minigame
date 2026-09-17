@@ -9,9 +9,9 @@
     content="มินิเกมทอยเต๋าดวลคะแนนกับระบบ (PvE) สุ่มแต้ม 1-12 ลุ้นเสมอได้ Free Roll และสะสมชัยชนะครบ 50 ครั้งรับ Special Pack สุดพิเศษ!">
 
   <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="css/style.css?v=2">
-  <link rel="stylesheet" href="css/dice.css?v=2">
-  <link rel="stylesheet" href="css/modals.css?v=2">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/dice.css?v=3">
+  <link rel="stylesheet" href="css/modals.css?v=3">
 </head>
 
 <body>
@@ -192,6 +192,12 @@
           <div id="player-score" class="board-score">0</div>
         </div>
       </div>
+
+      <!-- Last-Chance Promo Floating Entry Badge (Sale 72:00:00) -->
+      <button id="btn-promo-lastchance" class="promo-sale-badge" title="ข้อเสนอโค้งสุดท้าย! คลิกเพื่อดูรายละเอียด">
+        <img src="assets/images/sale_badge_blank.png" alt="Sale Promo" class="sale-badge-art">
+        <div id="sale-badge-timer" class="sale-badge-timer-txt">71:59:59</div>
+      </button>
     </section>
 
     <!-- ==========================================
@@ -524,6 +530,65 @@
   </div>
 
   <!-- ==========================================
+       MODAL 6: LAST-CHANCE PROMO PACK (ข้อเสนอโค้งสุดท้าย)
+       ========================================== -->
+  <div id="modal-last-chance-promo" class="modal-overlay">
+    <div class="modal-window promo-modal-window">
+      <!-- Close Button (Discreet X on top right) -->
+      <button class="btn-modal-close promo-modal-close" title="ปิด">&times;</button>
+
+      <!-- Purple Arched Ribbon Header -->
+      <div class="promo-ribbon-outer">
+        <div class="promo-ribbon-banner">
+          <span class="promo-ribbon-title">ข้อเสนอโค้งสุดท้าย!</span>
+        </div>
+        <!-- Live Countdown Timer Badge with Alarm Clock -->
+        <div class="promo-timer-pill">
+          <span class="promo-timer-icon">⏰</span>
+          <span id="promo-timer-countdown" class="promo-timer-val">71:59:59</span>
+        </div>
+      </div>
+
+      <!-- Luxury Corner Crystals / Pearls -->
+      <div class="promo-corner-crystal crystal-tl"></div>
+      <div class="promo-corner-crystal crystal-tr"></div>
+      <div class="promo-corner-crystal crystal-bl"></div>
+      <div class="promo-corner-crystal crystal-br"></div>
+
+      <!-- Modal Content Body -->
+      <div class="promo-modal-body">
+        <!-- Overflowing Treasure Chest Artwork -->
+        <div class="promo-illustration-box">
+          <img src="assets/images/promo_chest.jpg" alt="กล่องของขวัญโปรโมชั่นโค้งสุดท้าย" class="promo-chest-artwork">
+        </div>
+
+        <!-- Dynamic Offer Text -->
+        <div class="promo-message-box">
+          <div id="promo-status-text" class="promo-main-quote">
+            “คุณยังขาดอีก <span id="promo-missing-count" class="promo-highlight-count">10</span> ขั้นเพื่อรับกรอบโปรไฟล์ถาวร”
+          </div>
+        </div>
+
+        <!-- Strikethrough Original Price -->
+        <div class="promo-price-wrapper">
+          <div id="promo-original-strike" class="promo-original-strike">599 บาท</div>
+        </div>
+
+        <!-- Juicy Green CTA Button -->
+        <div class="promo-button-wrapper">
+          <button id="btn-promo-buy-deal" class="btn-promo-buy-deal">
+            <span id="promo-buy-deal-text" class="promo-btn-text">เหมาเลย 199 บาท</span>
+          </button>
+        </div>
+
+        <div id="promo-detail-note" class="promo-detail-note">
+          เหมาของรางวัลทั้งหมดที่เหลือจนถึงขั้นที่ 50 ทันที!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
        DEV TOOLS PANEL (FOR FAST TESTING)
        ========================================== -->
   <div id="dev-panel" class="dev-panel">
@@ -533,11 +598,15 @@
         style="background: none; border: none; color: #fff; cursor: pointer; font-size: 16px;">✕</button>
     </div>
     <div class="dev-actions">
-      <button id="dev-force-win" class="dev-btn" style="border-color: #2ecc71;">⚡ ล็อคผล: ชนะ (WIN)</button>
-      <button id="dev-force-draw" class="dev-btn" style="border-color: #00d2ff;">⚡ ล็อคผล: เสมอ (DRAW -> Free
-        Roll)</button>
-      <button id="dev-force-lose" class="dev-btn" style="border-color: #e74c3c;">⚡ ล็อคผล: แพ้ (LOSE)</button>
+      <!-- Dev Tools Actions (Single Unified Bar) -->
+      <button id="dev-open-lastchance" class="dev-btn" style="border-color: #e040fb; background: #6a1b9a; color: #fff; font-weight: bold;">🎁 เปิด Pop-up โค้งสุดท้าย</button>
+      <button id="dev-sim-missing-8" class="dev-btn" style="border-color: #ffd700; background: #4a148c; color: #ffd700;">✨ จำลอง: Premium + ขาด 8 ขั้น (Wins=3)</button>
+      <button id="dev-sim-missing-10" class="dev-btn" style="border-color: #ffd700; background: #4a148c; color: #ffd700;">✨ จำลอง: Premium + ขาด 10 ขั้น (Wins=0)</button>
+      <button id="dev-sim-completed" class="dev-btn" style="border-color: #2ecc71; background: #1b5e20; color: #a5d6a7;">🏁 จำลอง: เล่นครบ 50 ขั้นแล้ว</button>
       <button id="dev-toggle-premium" class="dev-btn" style="border-color: #f1c40f; background: #512270; color: #ffd700;">👑 สลับ ปลดล็อก/ล็อค Premium</button>
+      <button id="dev-force-win" class="dev-btn" style="border-color: #2ecc71;">⚡ ล็อคผล: ชนะ (WIN)</button>
+      <button id="dev-force-draw" class="dev-btn" style="border-color: #00d2ff;">⚡ ล็อคผล: เสมอ (DRAW -> Free Roll)</button>
+      <button id="dev-force-lose" class="dev-btn" style="border-color: #e74c3c;">⚡ ล็อคผล: แพ้ (LOSE)</button>
       <button id="dev-add-10wins" class="dev-btn">+10 Wins Milestone</button>
       <button id="dev-set-49wins" class="dev-btn" style="background: #e67e22; font-weight: 900;">🔥 ตั้งเป็น 49 ชนะ (ทดสอบ Milestone 50)</button>
       <button id="dev-reset-milestone-wins" class="dev-btn">🔄 รีเซ็ต Wins เป็น 0</button>

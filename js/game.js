@@ -21,7 +21,9 @@ class DiceGame {
       forcedOutcome: null, // For Dev Tools testing ('win' | 'lose' | 'draw' | null)
       isPremiumUnlocked: false,
       claimedFreeMilestones: [],
-      claimedPremiumMilestones: []
+      claimedPremiumMilestones: [],
+      eventHoursRemaining: 72,
+      lastChancePurchased: false
     };
 
     this.loadState();
@@ -257,6 +259,112 @@ class DiceGame {
     return false;
   }
 
+  /**
+   * Get how many milestone tiers the player is still missing (out of 10)
+   */
+  getRemainingMilestoneSteps() {
+    return DiceGame.MILESTONES.filter(m => m.wins > this.state.milestoneWins).length;
+  }
+
+  /**
+   * Calculate Last-Chance Offer dynamic bundle pricing based on missing tiers
+   */
+  calculateLastChancePrice() {
+    const remainingSteps = this.getRemainingMilestoneSteps();
+    if (remainingSteps === 0) {
+      return { remainingSteps: 0, originalPrice: 0, promoPrice: 0, isMaxTier: true };
+    }
+
+    let originalPrice = 599;
+    let promoPrice = 199;
+
+    if (remainingSteps >= 9) {
+      originalPrice = 599;
+      promoPrice = 199;
+    } else if (remainingSteps >= 7) {
+      originalPrice = 499;
+      promoPrice = 199;
+    } else if (remainingSteps >= 5) {
+      originalPrice = 399;
+      promoPrice = 159;
+    } else if (remainingSteps >= 3) {
+      originalPrice = 299;
+      promoPrice = 119;
+    } else {
+      originalPrice = 199;
+      promoPrice = 79;
+    }
+
+    return {
+      remainingSteps,
+      originalPrice,
+      promoPrice,
+      isMaxTier: false
+    };
+  }
+
+  /**
+   * Check if player meets condition for Last-Chance Offer popup:
+   * 1. Within last 3 days (<= 72 hours)
+   * 2. Player has purchased Premium (369 THB)
+   * 3. Player hasn't reached milestone 50 yet (< 50 wins)
+   */
+  isLastChanceEligible() {
+    return this.state.isPremiumUnlocked &&
+           this.state.milestoneWins < 50 &&
+           this.state.eventHoursRemaining <= 72;
+  }
+
+  /**
+   * Purchase Last-Chance Bundle:
+   * Instantly grants all remaining rewards up to 50 wins,
+   * unlocks premium, and sets milestoneWins to 50.
+   */
+  purchaseLastChanceBundle() {
+    const priceInfo = this.calculateLastChancePrice();
+    const remainingSteps = priceInfo.remainingSteps;
+
+    this.state.isPremiumUnlocked = true;
+    this.state.milestoneWins = 50;
+    this.state.lastChancePurchased = true;
+
+    let totalChipsAdded = 0;
+    const itemsClaimed = [];
+
+    // Auto-claim all free & premium milestones up to 50
+    for (const m of DiceGame.MILESTONES) {
+      // Claim Free
+      if (!this.state.claimedFreeMilestones.includes(m.wins)) {
+        this.state.claimedFreeMilestones.push(m.wins);
+        if (m.free.type === 'chips') {
+          totalChipsAdded += m.free.amount;
+        } else {
+          itemsClaimed.push(m.free.name);
+        }
+      }
+      // Claim Premium
+      if (!this.state.claimedPremiumMilestones.includes(m.wins)) {
+        this.state.claimedPremiumMilestones.push(m.wins);
+        if (m.premium.type === 'chips') {
+          totalChipsAdded += m.premium.amount;
+        } else {
+          itemsClaimed.push(m.premium.name);
+        }
+      }
+    }
+
+    this.state.coins += totalChipsAdded;
+    this.saveState();
+
+    return {
+      success: true,
+      price: priceInfo.promoPrice,
+      remainingSteps,
+      totalChipsAdded,
+      itemsClaimed
+    };
+  }
+
   resetAll() {
     localStorage.removeItem(this.STORAGE_KEY);
     this.state = {
@@ -272,7 +380,9 @@ class DiceGame {
       forcedOutcome: null,
       isPremiumUnlocked: false,
       claimedFreeMilestones: [],
-      claimedPremiumMilestones: []
+      claimedPremiumMilestones: [],
+      eventHoursRemaining: 72,
+      lastChancePurchased: false
     };
     this.saveState();
   }
