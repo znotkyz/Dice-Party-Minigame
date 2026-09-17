@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerDice = Dice3DSystem.partitionScore(duel.playerScore);
 
     // Step 1: System, Player score flickers, and 3D Dice all roll simultaneously and stop together!
-    const ROLL_DURATION = 1200;
+    const ROLL_DURATION = 1000;
     await Promise.all([
       animateScoreFlicker(elSystemScore, duel.systemScore, ROLL_DURATION),
       animateScoreFlicker(elPlayerScore, duel.playerScore, ROLL_DURATION),
