@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Dice Party Minigame - 3D Crystal Dice & Stage Animations
+   ========================================================================== */
+
+/* Dice Stage & 3D Perspective Area */
+.dice-stage-viewport {
+  position: absolute;
+  top: 15px;
+  width: 280px;
+  height: 170px;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* Base 3D Cube Container */
+.dice-cube {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.2, 0.85, 0.4, 1.2);
+}
+
+/* Idle Hover Animation */
+.dice-cube.idle {
+  animation: diceFloatIdle 3s infinite ease-in-out;
+}
+
+.dice-cube.die-1.idle {
+  animation-delay: 0s;
+}
+
+.dice-cube.die-2.idle {
+  animation-delay: 1.5s;
+}
+
+/* Face Styling */
+.dice-face {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 8px;
+  box-shadow: inset 0 0 14px rgba(255, 255, 255, 0.9), 0 0 8px rgba(0, 0, 0, 0.2);
+  backface-visibility: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Die 1: Crystal Rose/Pink (Left Die in Mockup) */
+.dice-cube.die-1 .dice-face {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 192, 220, 0.85) 45%, rgba(245, 90, 160, 0.9) 100%);
+  border-color: #ffd6eb;
+}
+
+.dice-cube.die-1 .pip {
+  background: radial-gradient(circle, #e01e6a 0%, #8b003a 100%);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* Die 2: Crystal Blue/Cyan (Right Die in Mockup) */
+.dice-cube.die-2 .dice-face {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(200, 240, 255, 0.85) 45%, rgba(41, 155, 255, 0.9) 100%);
+  border-color: #d6f2ff;
+}
+
+.dice-cube.die-2 .pip {
+  background: radial-gradient(circle, #005ecb 0%, #002e75 100%);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* Pip Dot Styling */
+.pip {
+  align-self: center;
+  justify-self: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+
+/* 3D Cube Transformations (Half size = 34px) */
+.face-front  { transform: translateZ(34px); }
+.face-back   { transform: rotateY(180deg) translateZ(34px); }
+.face-right  { transform: rotateY(90deg) translateZ(34px); }
+.face-left   { transform: rotateY(-90deg) translateZ(34px); }
+.face-top    { transform: rotateX(90deg) translateZ(34px); }
+.face-bottom { transform: rotateX(-90deg) translateZ(34px); }
+
+/* Face Pip Placements */
+/* 1: Center */
+.face-1 .pip:nth-child(1) { grid-area: 2 / 2; width: 17px; height: 17px; }
+
+/* 2: Top-Right, Bottom-Left */
+.face-2 .pip:nth-child(1) { grid-area: 1 / 3; }
+.face-2 .pip:nth-child(2) { grid-area: 3 / 1; }
+
+/* 3: Top-Right, Center, Bottom-Left */
+.face-3 .pip:nth-child(1) { grid-area: 1 / 3; }
+.face-3 .pip:nth-child(2) { grid-area: 2 / 2; }
+.face-3 .pip:nth-child(3) { grid-area: 3 / 1; }
+
+/* 4: Four Corners */
+.face-4 .pip:nth-child(1) { grid-area: 1 / 1; }
+.face-4 .pip:nth-child(2) { grid-area: 1 / 3; }
+.face-4 .pip:nth-child(3) { grid-area: 3 / 1; }
+.face-4 .pip:nth-child(4) { grid-area: 3 / 3; }
+
+/* 5: Four Corners + Center */
+.face-5 .pip:nth-child(1) { grid-area: 1 / 1; }
+.face-5 .pip:nth-child(2) { grid-area: 1 / 3; }
+.face-5 .pip:nth-child(3) { grid-area: 2 / 2; }
+.face-5 .pip:nth-child(4) { grid-area: 3 / 1; }
+.face-5 .pip:nth-child(5) { grid-area: 3 / 3; }
+
+/* 6: Six Pips */
+.face-6 .pip:nth-child(1) { grid-area: 1 / 1; }
+.face-6 .pip:nth-child(2) { grid-area: 2 / 1; }
+.face-6 .pip:nth-child(3) { grid-area: 3 / 1; }
+.face-6 .pip:nth-child(4) { grid-area: 1 / 3; }
+.face-6 .pip:nth-child(5) { grid-area: 2 / 3; }
+.face-6 .pip:nth-child(6) { grid-area: 3 / 3; }
+
+/* Dynamic Tumbling Animation when rolling */
+.dice-cube.rolling-1 {
+  animation: diceRollWild1 0.7s infinite linear;
+}
+
+.dice-cube.rolling-2 {
+  animation: diceRollWild2 0.75s infinite linear;
+}
+
+@keyframes diceRollWild1 {
+  0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(-25px); }
+  50%  { transform: rotateX(360deg) rotateY(180deg) rotateZ(180deg) translateY(-45px); }
+  100% { transform: rotateX(720deg) rotateY(360deg) rotateZ(360deg) translateY(-25px); }
+}
+
+@keyframes diceRollWild2 {
+  0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(-20px); }
+  50%  { transform: rotateX(-360deg) rotateY(240deg) rotateZ(-180deg) translateY(-50px); }
+  100% { transform: rotateX(-720deg) rotateY(720deg) rotateZ(-360deg) translateY(-20px); }
+}
+
+@keyframes diceFloatIdle {
+  0%, 100% { transform: translateY(0px) rotateX(-15deg) rotateY(25deg); }
+  50%      { transform: translateY(-8px) rotateX(-10deg) rotateY(30deg); }
+}
+
+/* Floor Shadow below each die */
+.dice-shadow {
+  position: absolute;
+  bottom: 25px;
+  width: 70px;
+  height: 24px;
+  background: radial-gradient(ellipse, rgba(80, 20, 30, 0.45) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.dice-cube.rolling-1 ~ .dice-shadow-1,
+.dice-cube.rolling-2 ~ .dice-shadow-2 {
+  transform: scale(0.65);
+  opacity: 0.25;
+}
+
+/* Confetti & Particle Canvas overlay */
+#particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 80;
+}

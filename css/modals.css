@@ -1,0 +1,461 @@
+/* ==========================================================================
+   Dice Party Minigame - Modals, Dialogs, Toast, & Dev Panel Styles
+   ========================================================================== */
+
+/* Backdrop overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 6, 25, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 16px;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Modal Window Container */
+.modal-window {
+  background: linear-gradient(180deg, #381e59 0%, #200f35 100%);
+  border: 4px solid #ffcc00;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  transform: scale(0.85) translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-overlay.active .modal-window {
+  transform: scale(1) translateY(0);
+}
+
+/* Header */
+.modal-header {
+  background: linear-gradient(180deg, #5b348d 0%, #3d2060 100%);
+  border-bottom: 3px solid #ffcc00;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.modal-title {
+  font-family: var(--font-game);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-modal-close {
+  background: #ff4757;
+  border: 2px solid #ffffff;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.btn-modal-close:hover {
+  transform: scale(1.1);
+  background: #ff6b81;
+}
+
+/* Body */
+.modal-body {
+  padding: 22px;
+  max-height: 70vh;
+  overflow-y: auto;
+  color: #ffeedd;
+}
+
+/* Custom Scrollbar */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background: #7343a8;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   TICKET SHOP MODAL
+   ========================================================================== */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.shop-card {
+  background: linear-gradient(180deg, #4f2b7a 0%, #2e164a 100%);
+  border: 2px solid #945ecb;
+  border-radius: 18px;
+  padding: 16px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  border-color: #ffcc00;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.shop-card.featured {
+  border-color: #f1c40f;
+  background: linear-gradient(180deg, #64318c 0%, #39195b 100%);
+  position: relative;
+}
+
+.shop-card.featured::before {
+  content: 'POPULAR';
+  position: absolute;
+  top: -10px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid #fff;
+}
+
+.shop-ticket-img {
+  font-size: 40px;
+  margin-bottom: 6px;
+}
+
+.shop-amount {
+  font-family: var(--font-num);
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.shop-subtext {
+  font-size: 12px;
+  color: #ffb8d1;
+  margin-bottom: 12px;
+}
+
+.btn-buy {
+  width: 100%;
+  background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+  color: white;
+  font-family: var(--font-game);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 8px 0;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.btn-buy:hover {
+  transform: scale(1.04);
+  filter: brightness(1.1);
+}
+
+.btn-buy:active {
+  transform: scale(0.96);
+}
+
+.free-refill-box {
+  margin-top: 18px;
+  background: rgba(255, 204, 0, 0.1);
+  border: 2px dashed #ffcc00;
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ==========================================================================
+   SPECIAL PACK CELEBRATION MODAL (50 WINS)
+   ========================================================================== */
+.special-pack-modal .modal-window {
+  max-width: 580px;
+  border-color: #ffd700;
+  background: linear-gradient(180deg, #4b1a6a 0%, #1f0732 100%);
+  box-shadow: 0 0 60px rgba(255, 215, 0, 0.7);
+}
+
+.pack-burst-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.grand-chest-anim {
+  width: 130px;
+  height: 130px;
+  filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
+  animation: chestHop 1s infinite alternate cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes chestHop {
+  0%   { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.12) translateY(-14px) rotate(3deg); }
+}
+
+.congrats-heading {
+  font-family: 'Outfit', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.5);
+  margin-top: 12px;
+}
+
+.congrats-desc {
+  font-size: 15px;
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+.reward-items-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.reward-item-card {
+  background: linear-gradient(180deg, #663294 0%, #3e1b5d 100%);
+  border: 2px solid #ffd700;
+  border-radius: 16px;
+  padding: 12px 16px;
+  min-width: 100px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.reward-icon {
+  font-size: 34px;
+  margin-bottom: 4px;
+}
+
+.reward-qty {
+  font-family: var(--font-num);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.reward-name {
+  font-size: 12px;
+  color: #fff;
+}
+
+.btn-claim-pack {
+  background: linear-gradient(180deg, #ff9f1a 0%, #e67e22 50%, #d35400 100%);
+  border: 3px solid #fff;
+  border-radius: 30px;
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  padding: 12px 48px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(230, 126, 34, 0.6);
+  transition: transform 0.15s ease;
+  margin-top: 10px;
+}
+
+.btn-claim-pack:hover {
+  transform: scale(1.06);
+}
+
+/* ==========================================================================
+   HISTORY MODAL TABLE
+   ========================================================================== */
+.history-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 14px;
+}
+
+.history-table th {
+  background: #502780;
+  color: #ffd700;
+  padding: 10px;
+  font-weight: 700;
+  border-bottom: 2px solid #7343a8;
+}
+
+.history-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.history-result-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.history-result-badge.win  { background: #27ae60; color: #fff; }
+.history-result-badge.lose { background: #c0392b; color: #fff; }
+.history-result-badge.draw { background: #0097e6; color: #fff; }
+
+.empty-history {
+  text-align: center;
+  padding: 30px 0;
+  color: #baa2d6;
+}
+
+/* ==========================================================================
+   HELP & RULES MODAL
+   ========================================================================== */
+.rule-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-left: 4px solid #ffcc00;
+}
+
+.rule-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffd700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rule-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #e0d0f5;
+}
+
+/* ==========================================================================
+   DEV TOOLS PANEL (SLIDE DRAWER)
+   ========================================================================== */
+.dev-panel {
+  background: #180829;
+  border-top: 3px solid #f1c40f;
+  padding: 14px 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.dev-panel.open {
+  transform: translateY(0);
+}
+
+.dev-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #f1c40f;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dev-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dev-btn {
+  background: #39195b;
+  border: 1px solid #773bb8;
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dev-btn:hover {
+  background: #552788;
+  border-color: #ffd700;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATION
+   ========================================================================== */
+.toast-msg {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  background: rgba(32, 14, 53, 0.95);
+  border: 2px solid #ffd700;
+  border-radius: 30px;
+  padding: 10px 24px;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-msg.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
