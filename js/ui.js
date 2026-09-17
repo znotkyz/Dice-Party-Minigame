@@ -312,21 +312,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   function renderHistory() {
     if (!game.state.history.length) {
-      historyTableBody.innerHTML = `<tr><td colspan="5" class="empty-history">ยังไม่มีประวัติการดวล กดทอยเต๋าเพื่อเริ่มเล่น!</td></tr>`;
+      historyTableBody.innerHTML = `<tr><td colspan="4" class="empty-history">ยังไม่มีประวัติการดวล กดทอยเต๋าเพื่อเริ่มเล่น!</td></tr>`;
       return;
     }
 
     historyTableBody.innerHTML = game.state.history.map(item => {
       let badgeClass = item.result === 'WIN' ? 'win' : (item.result === 'LOSE' ? 'lose' : 'draw');
       let resultText = item.result === 'WIN' ? 'ชนะ' : (item.result === 'LOSE' ? 'แพ้' : 'เสมอ (Free Roll)');
-      let rewardText = item.result === 'WIN' ? 'Milestone +1' : (item.result === 'DRAW' ? 'Free Roll' : '-');
       return `
         <tr>
           <td>#${item.round}</td>
           <td><strong style="color: #ffda79;">${item.systemScore}</strong></td>
           <td><strong style="color: #ffccd5;">${item.playerScore}</strong></td>
           <td><span class="history-result-badge ${badgeClass}">${resultText}</span></td>
-          <td>${rewardText}</td>
         </tr>
       `;
     }).join('');
