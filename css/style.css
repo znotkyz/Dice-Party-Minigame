@@ -507,7 +507,7 @@ body {
   background: linear-gradient(180deg, #442a6c 0%, #261540 100%);
   border: 3px solid #7343a8;
   border-radius: 28px;
-  padding: 6px 18px 6px 65px;
+  padding: 6px 18px 6px 68px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -516,6 +516,7 @@ body {
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease;
   min-width: 220px;
+  overflow: visible;
 }
 
 .milestone-widget:hover {
@@ -528,14 +529,16 @@ body {
   left: -12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 68px;
-  height: 68px;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
   transition: transform 0.25s ease;
+  pointer-events: none;
 }
 
 .milestone-widget:hover .milestone-chest-icon {
-  transform: translateY(-50%) scale(1.1) rotate(-5deg);
+  transform: translateY(-50%) scale(1.08) rotate(-4deg);
 }
 
 .milestone-header {
