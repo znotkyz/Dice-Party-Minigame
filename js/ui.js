@@ -51,11 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Roll button mode (always uses the classic orange-gold frame)
     if (game.state.freeRollActive) {
-      btnRollText.textContent = 'FREE ROLL!';
-      btnRollSub.textContent = 'No ticket needed';
+      btnRollText.textContent = 'ทอยฟรี';
+      btnRollSub.textContent = 'ไม่ต้องใช้ทิกเก็ต';
     } else {
-      btnRollText.textContent = 'ROLL!';
-      btnRollSub.textContent = 'USE 1 TICKET';
+      btnRollText.textContent = 'ทอย';
+      btnRollSub.textContent = 'ใช้ 1 ทิกเก็ต';
     }
   }
 
