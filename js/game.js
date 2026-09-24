@@ -23,7 +23,8 @@ class DiceGame {
       claimedFreeMilestones: [],
       claimedPremiumMilestones: [],
       eventHoursRemaining: 72,
-      lastChancePurchased: false
+      lastChancePurchased: false,
+      consecutiveLosses: 0 // Bad-luck protection: >= 4 consecutive losses forces next roll to WIN
     };
 
     this.loadState();
@@ -83,8 +84,11 @@ class DiceGame {
     let systemScore = Math.floor(Math.random() * 12) + 1;
     let playerScore = Math.floor(Math.random() * 12) + 1;
 
-    // Support forced outcome for Dev testing
-    if (this.state.forcedOutcome === 'win') {
+    // Bad-luck / Pity Protection: If lost 4 times in a row, force WIN on the next roll!
+    const isPityWin = (this.state.consecutiveLosses || 0) >= 4;
+
+    // Support forced outcome for Dev testing or Pity guarantee
+    if (this.state.forcedOutcome === 'win' || isPityWin) {
       systemScore = Math.floor(Math.random() * 6) + 1; // 1 to 6
       playerScore = Math.floor(Math.random() * (12 - systemScore)) + systemScore + 1; // systemScore+1 to 12
     } else if (this.state.forcedOutcome === 'lose') {
@@ -105,6 +109,7 @@ class DiceGame {
       result = 'WIN';
       this.state.totalWins++;
       this.state.milestoneWins++;
+      this.state.consecutiveLosses = 0; // Reset loss streak upon winning
       coinsEarned = 0; // ไม่แจกเหรียญเมื่อชนะ
 
       // Check for Milestone 50 trigger
@@ -114,6 +119,7 @@ class DiceGame {
     } else if (playerScore < systemScore) {
       // LOSE
       result = 'LOSE';
+      this.state.consecutiveLosses = (this.state.consecutiveLosses || 0) + 1;
       coinsEarned = 0;
     } else {
       // DRAW -> Free Roll granted!
@@ -152,7 +158,9 @@ class DiceGame {
       freeRollGranted: result === 'DRAW',
       unlockedSpecialPack,
       milestoneWins: this.state.milestoneWins,
-      milestoneTarget: this.state.milestoneTarget
+      milestoneTarget: this.state.milestoneTarget,
+      consecutiveLosses: this.state.consecutiveLosses,
+      wasPityWin: isPityWin
     };
   }
 
@@ -361,7 +369,8 @@ class DiceGame {
       claimedFreeMilestones: [],
       claimedPremiumMilestones: [],
       eventHoursRemaining: 72,
-      lastChancePurchased: false
+      lastChancePurchased: false,
+      consecutiveLosses: 0
     };
     this.saveState();
   }

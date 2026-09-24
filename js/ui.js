@@ -246,13 +246,25 @@ document.addEventListener('DOMContentLoaded', () => {
       dice3d.spawnConfetti(90);
       elResultBadge.className = 'result-badge win';
       elResultBadge.textContent = 'ชนะ';
-      elResultSub.textContent = 'แต้มสูงกว่าเผือก Milestone +1';
+      if (duel.wasPityWin) {
+        elResultSub.textContent = 'แต้มสูงกว่าเผือก Milestone +1';
+        showToast('🛡️ บังคับชนะเมื่อแพ้ติดกันครบ 4 ครั้ง!');
+      } else {
+        elResultSub.textContent = 'แต้มสูงกว่าเผือก Milestone +1';
+      }
       elResultBanner.classList.add('show');
     } else if (duel.result === 'LOSE') {
       sound.playLose();
       elResultBadge.className = 'result-badge lose';
       elResultBadge.textContent = 'แพ้';
-      elResultSub.textContent = 'แต้มน้อยกว่าเผือก ลองใหม่อีกครั้ง';
+      if (duel.consecutiveLosses >= 4) {
+        elResultSub.textContent = 'แพ้ติดกัน 4 ครั้งแล้ว! ครั้งถัดไปการันตีชนะแน่นอน 🎲';
+        showToast('🛡️ แพ้ติดกันครบ 4 ครั้งแล้ว! ครั้งถัดไปจะบังคับชนะทันที');
+      } else if (duel.consecutiveLosses > 1) {
+        elResultSub.textContent = `แต้มน้อยกว่าเผือก ลองใหม่อีกครั้ง`;
+      } else {
+        elResultSub.textContent = 'แต้มน้อยกว่าเผือก ลองใหม่อีกครั้ง';
+      }
       elResultBanner.classList.add('show');
     } else {
       // DRAW -> Free Roll!
@@ -607,6 +619,15 @@ document.addEventListener('DOMContentLoaded', () => {
     game.state.forcedOutcome = 'lose';
     showToast('⚙️ Dev: สั่งล็อคผลตาถัดไปให้ -> LOSE');
   });
+
+  const devSim4Losses = document.getElementById('dev-sim-4losses');
+  if (devSim4Losses) {
+    devSim4Losses.addEventListener('click', () => {
+      game.state.consecutiveLosses = 4;
+      game.saveState();
+      showToast('🛡️ Dev: จำลองแพ้ติดกัน 4 ครั้งแล้ว! กดทอยครั้งถัดไปจะบังคับชนะทันที');
+    });
+  }
 
   document.getElementById('dev-add-tickets').addEventListener('click', () => {
     game.state.tickets += 10;
