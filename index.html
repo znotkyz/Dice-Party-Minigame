@@ -9,9 +9,9 @@
     content="มินิเกมทอยเต๋าดวลคะแนนกับระบบ (PvE) สุ่มแต้ม 1-12 ลุ้นเสมอได้ Free Roll และสะสมชัยชนะครบ 50 ครั้งรับ Special Pack สุดพิเศษ!">
 
   <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
   <link rel="stylesheet" href="css/dice.css?v=6">
-  <link rel="stylesheet" href="css/modals.css?v=5">
+  <link rel="stylesheet" href="css/modals.css?v=6">
 </head>
 
 <body>
@@ -50,7 +50,7 @@
 
         <!-- Ticket Pill -->
         <div class="resource-pill ticket-pill" title="ตั๋วสำหรับทอยเต๋า">
-          <div class="resource-icon ticket-icon">🎫</div>
+          <div class="resource-icon ticket-icon"><img src="assets/images/icon_ticket.png" alt="Ticket" class="resource-icon-img"></div>
           <span id="ticket-value" class="resource-value">10,000</span>
           <button id="btn-add-ticket" class="btn-add-ticket" title="ซื้อตั๋วเพิ่ม">+</button>
         </div>
@@ -264,7 +264,7 @@
             <span id="pass-coin-val" class="currency-val">50,000</span>
           </div>
           <div class="currency-badge ticket-badge">
-            <span class="currency-icon">🎟️</span>
+            <img src="assets/images/icon_ticket.png" alt="Ticket" class="currency-badge-img">
             <span id="pass-ticket-val" class="currency-val">10,000</span>
             <button class="btn-add-ticket-mini" id="btn-pass-add-ticket">+</button>
           </div>
@@ -374,7 +374,7 @@
   <div id="modal-shop" class="modal-overlay">
     <div class="modal-window">
       <div class="modal-header">
-        <div class="modal-title">🎫 ร้านค้าตั๋ว (Ticket Shop)</div>
+        <div class="modal-title"><img src="assets/images/icon_ticket.png" alt="Ticket" class="modal-title-ticket-img"> ร้านค้าตั๋ว (Ticket Shop)</div>
         <button class="btn-modal-close">&times;</button>
       </div>
       <div class="modal-body">
@@ -385,7 +385,7 @@
         <div class="shop-grid">
           <!-- Item 1 -->
           <div class="shop-card">
-            <div class="shop-ticket-img">🎟️</div>
+            <div class="shop-ticket-img"><img src="assets/images/icon_ticket.png" alt="1 Ticket" class="shop-item-ticket-img"></div>
             <div class="shop-amount">1 ตั๋ว</div>
             <div class="shop-subtext">Starter Pack</div>
             <button class="btn-buy" data-tickets="1" data-cost="100">
@@ -395,7 +395,7 @@
 
           <!-- Item 2 (Popular) -->
           <div class="shop-card featured">
-            <div class="shop-ticket-img">🎫</div>
+            <div class="shop-ticket-img"><img src="assets/images/icon_ticket.png" alt="5 Tickets" class="shop-item-ticket-img featured-ticket"></div>
             <div class="shop-amount">5 ตั๋ว</div>
             <div class="shop-subtext">ประหยัด 50 เหรียญ</div>
             <button class="btn-buy" data-tickets="5" data-cost="450">
@@ -405,7 +405,7 @@
 
           <!-- Item 3 -->
           <div class="shop-card">
-            <div class="shop-ticket-img">👑</div>
+            <div class="shop-ticket-img"><img src="assets/images/icon_ticket.png" alt="10 Tickets" class="shop-item-ticket-img" style="width: 54px; height: 54px;"></div>
             <div class="shop-amount">10 ตั๋ว</div>
             <div class="shop-subtext">สุดคุ้ม คอเกม</div>
             <button class="btn-buy" data-tickets="10" data-cost="800">
