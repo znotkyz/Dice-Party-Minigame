@@ -323,6 +323,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <ellipse cx="16" cy="9" rx="5" ry="1.8" fill="#dc2626"/>
         </svg>`;
       }
+      if (item.icon === '🪙') {
+        return `<img src="assets/images/icon_coin.png" alt="Coin" class="slot-coin-img">`;
+      }
       return item.icon;
     };
 
